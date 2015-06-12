@@ -1,0 +1,9 @@
+# Site settings
+email: ljcohen@ucdavis.edu
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://ljcohen.github.io/" # the base hostname & protocol for your site
+twitter_username: monsterbashseq
+github_username:  ljcohen
+
+# Build settings
+markdown: kramdown
