@@ -338,11 +338,14 @@ head(SLR_matrix_shift1)
 Data were log2 transformed then normalized with 2 methods: the internal limma function "normalizeBetweenArrays" and the base R function, "normalizeCyclicLoess" Loess transformation. See "HBOI_SLR_microarray_log2_norm_results.ppt" and 3 arrayQualityMetrics reports for further details on the quality assessment of the raw data and why the Loess normalization method was chosen to smooth the data.
 
 http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_notransform/index.html
+
 http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform/index.html
+
 http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_Loess/index.html
+
 http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_normBetweenArrays/index.html
 
-http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2_norm_results.pptx.pdf
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/HBOI_SLR_microarray_log2_norm_results.pptx.pdf
 
 Typically, when data are noisy like this, and grouped slightly by technical variables such as hyb date and chip, normalization and removal of outliers can help with smoothing the data to pull out biological variation. (See Section 6.3 Between-Array Normalization of limma user guide: http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf)
 
