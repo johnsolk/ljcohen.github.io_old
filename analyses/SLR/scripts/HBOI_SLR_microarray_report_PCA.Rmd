@@ -11,53 +11,58 @@ output: html_document
    library("arrayQualityMetrics")
    library("Biobase")
    library("ggplot2")
+   setwd("~/Documents/HBOI/SLR/SLR/SLR_2012_2013_rawdata_Rscriptsandanalyses")
 ```
+
+Analysis files available here for download:
+
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/SLR
 
 # Table of Contents:
 1. Experiment Description
-2. Data Analysis Procedure
-3. Raw Data QC
-4. Sample Names
+2. Lab Protocols
+3. Data Collection
+4. Raw Data QC
 5. PCA Results Figures
-6. Results Files
-7. Venn Diagram Results Figures
-8. Comments
-9. Contact
-10. References
+6. Transcript-level expression for each chip
+7. Results Files
+8. Venn Diagram Results Figures
+9. Comments
+10. Contact
+11. References
 
-## 1. Experiment Description
+# 1. Experiment Description
 
-This is a differential gene expression analysis from eleven custom Agilent microarray chips processed at HBOI on six dates: 12/5/2013, 5/24/2013, 5/30/2013, 6/11/2013, 6/5/2013, 6/6/2013. The experiment consists of hard coral samples, Montastraea cavernosa collected from 3 sites on 3 different dates. At least 4 samples at each site were collected from separate colonies for a total of 44 samples.
+This experiment consisted of hard coral samples, Orbicella faveolata collected from 3 sites (South, Ledge, Central) on the St. Lucie Reef on 3 different dates (June 2012, Oct 2012, Jan/Feb 2013). At least 4 samples at each site were collected from separate colonies for a total of 44 samples. 
 
-# 2. Data analysis procedure
+The aim was to see if gene expression patterns were different in the samples based on spatial or temporal differences between samples. 
+
+# 2. Lab Protocols
+
+Coral samples were immediately preserved in the field in a guanidinium thiocyanate-phenol nucleic acid preservative, transported back to the lab on ice and stored at -80ºC. In a clean RNase free lab setting, phenol-chloroform extractions were performed on all samples. Aliquots were removed and chloroform added at a ratio of 1:5. RNA was separated in the aqueous layer, precipitated with ethanol and purified with LiCl. A NanoDrop® 1000 spectrophotometer (Thermo Fisher Scientific, Inc., MA USA) was used to quantify total RNA. Label-IT© (Mirus Bio LLC, Wisconsin, USA) nucleic acid labeling kit (MIR 3700) was used to covalently attach Cy™ 5 (excitation 650 nm and emission 670 nm) cyanine fluorescent dye at a frequency of one label about every 20-60 base pairs to 5µg of each sample.  Fluorescent dye labeling allows detection if binding occurs between complimentary RNA fragments in the sample and known oligonucleotides spotted on the microarray. Labeling was done according to the standard manufacturer’s protocol (Lit# ML002, Rev 11/15/06) and quantified on a NanoDrop® 1000 spectrophotometer, wavelengths 225-750 nm. All Cy™ 5-labeled total RNA samples were hybridized to custom anti-sense 4x2K oligonucleotide CustomArrays™ using methods described in the hybridization and imaging protocol (Ecogenomics, Inc., Japan). Total RNA samples were fragmented with 10X fragmentation reagent (buffered zinc solution) and stop solution (200 mM EDTA, pH 8.0) (Catalog #AM8740, Ambion®, Applied Biosystems, Texas, USA).   
+
+# 3. Data Collection
 
 Microarray chips were imaged at 635 nm using a high-resolution laser GenePix® 4200A microarray scanner (Axon, Molecular Devices, California, USA).  Data were extracted from images using GenePixPro 6.0 software as .gpr files.
 
-Data were imported into the R statistical programming environment. The R-Bioconductor package, limma (Linear Models for Microarray Data, version 3.22.3, Ritchie et al. 2015; Smyth 2004) was used to assess the quality of the data and to analyze for differential expression.
-
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 options(width=600)
-sample_info<-read.csv("targets_experiment_sample_info_revised_again.csv")
+# contains sample infor from 2010, needs to be analyzed separately
+#sample_info<-read.csv("targets_experiment_sample_info_revised_again.csv")
+sample_info<-read.csv("targets_experiment_sample_info_revised.csv")
 sample_info_matrix<-as.matrix(sample_info)
 sample_info_matrix<-sample_info_matrix[,-1]
 rownames(sample_info_matrix)<-sample_info$X
 sample_info_dataframe<-as.data.frame(sample_info_matrix)
-experimentData<-new("MIAME",name="Lisa Cohen, Joshua Voss, Sara Edge, Jeff Beal",
-                    lab="Marine Functional Genomics, HBOI",
-                    contact="ljcohen@ucdavis.edu",
-                    title="St. Lucie Reef Seasonal Samples 2011",
-                    abstract="ExpressionSet for SLR 2011 Microarray Data",
-                    other=list(notes="Created from GenePix *.gpr files"))
-pd<-new("AnnotatedDataFrame",data=sample_info_dataframe)
 SLR_sum<-table(sample_info_dataframe$Site,sample_info_dataframe$Date)
 SLR_sum
 sample_info_dataframe
 ```
 
 
-# 3. Raw Data QC:
+# 4. Raw Data QC:
 
-Raw microarray data: 
+Data were imported into the R statistical programming environment. The R-Bioconductor package, limma (Linear Models for Microarray Data, version 3.22.3, Ritchie et al. 2015; Smyth 2004) was used to assess the quality of the data and to analyze for differential expression. All data were shifted +1 to accomodate log2 transformation. These are the first 6 rows of shifted +1 raw microarray data (not log2 transformed): 
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
    library("limma")
@@ -327,17 +332,200 @@ SLR_matrix_shift1<-matrix_alldata+1
 nams<-all_data$Name
 rownames(SLR_matrix_shift1)=make.names(nams,unique=TRUE)
 head(SLR_matrix_shift1)
+
+```
+
+Data were log2 transformed then normalized with 2 methods: the internal limma function "normalizeBetweenArrays" and the base R function, "normalizeCyclicLoess" Loess transformation. See "HBOI_SLR_microarray_log2_norm_results.ppt" and 3 arrayQualityMetrics reports for further details on the quality assessment of the raw data and why the Loess normalization method was chosen to smooth the data.
+
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_notransform/index.html
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform/index.html
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_Loess/index.html
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_normBetweenArrays/index.html
+
+http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2_norm_results.pptx.pdf
+
+Typically, when data are noisy like this, and grouped slightly by technical variables such as hyb date and chip, normalization and removal of outliers can help with smoothing the data to pull out biological variation. (See Section 6.3 Between-Array Normalization of limma user guide: http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf)
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+## Data transformation
 SLR_matrix_shift1_log2<-log2(SLR_matrix_shift1)
+
+# normalizeBetweenArrays
 norm_SLR_matrix_shift1_log2<-normalizeBetweenArrays(SLR_matrix_shift1_log2)
+# Loess transformation
 SLR_matrix_shift1_log2_Loess<-normalizeCyclicLoess(SLR_matrix_shift1_log2)
 ```
 
-# PCA results
+Internal control probes were removed. These probes are supplied by the manufacturer and contain plant (SpkCtrl: RCP1| AF168390_1144_1178) and bacterial (SpkCtrl: NAC1| AF198054_481_515) sequences. We did not spike-in control RNA into these samples. Since total mRNA from corals potentially contain these sequences, we do typically see binding to these probes despite the absence of spike-in and they are not accurate to use as controls.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+### Remove positive controls:
+annotation<-read.csv("mote_09_jpn_annotation.csv")
+annotation_matrix<-as.matrix(annotation)
+#dim(annotation_matrix)
+annotation_dataframe<-as.data.frame(annotation_matrix)
+rownames(annotation_dataframe)<-make.names(annotation_dataframe$Name,unique=TRUE)
+#dim(annotation_dataframe)
+# find controls:
+annotation_controls<-annotation_dataframe[annotation_dataframe$Probe=="Spkctrl",]
+annotation_SedCC9<-annotation_dataframe[annotation_dataframe$Probe=="SedC(C9)_1" | annotation_dataframe$Probe=="SedC(C9)_2",]
+# remove rows where none of the arrays had expression
+# there are 44 samples, so if expression for each row was at least 1, rowSum should = 44
+# remove rowSums <50
+SLR_matrix_shift1_minus_lowexpressors<-SLR_matrix_shift1_log2_Loess[rowSums(SLR_matrix_shift1_log2_Loess)>50,]
+## check controls
+SLR_matrix_controls<-subset(SLR_matrix_shift1_log2_Loess, rownames(SLR_matrix_shift1_log2_Loess) %in% rownames(annotation_controls))
+## check SedCC9
+SLR_matrix_SedCC9<-subset(SLR_matrix_shift1_log2_Loess, rownames(SLR_matrix_shift1_log2_Loess) %in% rownames(annotation_SedCC9))
+
+# remove controls
+SLR_matrix_minuscontrols<-subset(SLR_matrix_shift1_log2_Loess,!(rownames(SLR_matrix_shift1_log2_Loess) %in% rownames(annotation_controls)))
+```
+
+
+# 5. PCA results
+
+Principal component analysis (PCA) reduces all expression data for each sample down to one point and compares samples in unitless vector space. The farther apart the samples are, the greater the differences there are in the data. When doing a differential expression analysis, it is important to understand where the variability is between samples so results can be interpreted accordingly. 
+
+Variables such as chip, hyb date, site, sample collection date, and "var" (site and sample date combined) are color-coded in the PCA below to see if there are differences between groups. Chip and hyb date are technical groupings, so we do not expect to see these data clustered together. Site and sample collection date are both biological groupings. If these data appear to be grouped together, then we know differences in gene expression between samples are due to biological variation and not technical variation.
+
 ## chip
+
+Data from chip2 appear to group together on the left along PC1 (the primary source of experimental variation). We could try to remove this chip as a potential outlier.
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 library(lattice)
-x<-SLR_matrix_shift1_log2_Loess
+x<-SLR_matrix_minuscontrols
+pca = prcomp(t(x))
+names = colnames(x)
+fac= factor(c("1","1","1","1","2","2","2","2","3","3","3","3","4","4","4","4","5","5","5","5","6","6","6","6","7","7","7","7","8","8","8","8",
+              "9","9","9","9","10","10","10","10","11","11","11","11","12","12","12","12"))
+colours = c("red","blue","green","yellow","orange","purple","black","brown","gray","lightblue","deeppink")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## hyb date
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("5/24/13","5/24/13","5/24/13","5/24/13",
+              "12/5/13","12/5/13","12/5/13","12/5/13",
+              "6/6/13","6/6/13","6/6/13","6/6/13",
+              "6/11/13","6/11/13","6/11/13","6/11/13",
+              "6/11/13","6/11/13","6/11/13","6/11/13",
+              "12/5/13","12/5/13","12/5/13","12/5/13",
+              "5/24/13","5/24/13","5/24/13","5/24/13",
+              "5/30/13","5/30/13","5/30/13","5/30/13",
+              "5/30/13","5/30/13","5/30/13","5/30/13",
+              "6/5/13","6/5/13","6/5/13","6/5/13",
+              "6/6/13","6/6/13","6/6/13","6/6/13"))
+names=fac
+colours = c("red","blue","green","yellow","orange","purple","black","brown")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+
+```
+## site
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("South","Ledge","South","Ledge",
+              "Central","South","Ledge","Ledge",
+              "Ledge","South","Central","Ledge",
+              "Central","South","Ledge","South",
+              "South","South","Ledge","South",
+              "Ledge","South","Central","Ledge",
+              "Central","Central","South","Ledge",
+              "South","Ledge","South","South",
+              "Ledge","Central","South","Ledge",
+              "Ledge","South","Central","Ledge",
+              "South","South","Ledge","South"))
+names=fac
+colours = c("red","blue","green")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## date
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("Oct2012","June2012","June2012","JanFeb2013",
+              "JanFeb2013","Oct2012","JanFeb2013","Oct2012",
+              "Oct2012","Oct2012","JanFeb2013","Oct2012",
+              "June2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013",
+              "June2012","June2012","JanFeb2013","JanFeb2013",
+              "June2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013",
+              "Oct2012","JanFeb2013","Oct2012","Oct2012",
+              "Oct2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013"))
+names=fac
+colours = c("red","blue","green")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## var
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("South_Oct2012","Ledge_June2012","South_June2012","Ledge_JanFeb2013",
+              "Central_JanFeb2013","South_Oct2012","Ledge_JanFeb2013","Ledge_Oct2012",
+              "Ledge_Oct2012","South_Oct2012","Central_JanFeb2013","Ledge_Oct2012",
+              "Central_June2012","South_June2012","Ledge_June2012","South_June2012",
+              "South_JanFeb2013","South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013",
+              "Ledge_June2012","South_June2012","Central_JanFeb2013","Ledge_JanFeb2013",
+              "Central_June2012","Central_June2012","South_June2012","Ledge_June2012",
+              "South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013","South_JanFeb2013",
+              "Ledge_Oct2012","Central_JanFeb2013","South_Oct2012","Ledge_Oct2012",
+              "Ledge_Oct2012","South_June2012","Central_June2012","Ledge_June2012",
+              "South_JanFeb2013","South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013"))
+names=fac
+colours = c("red","blue","green","yellow","deeppink","black","lightblue","purple")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+Since the data do not appear to strongly cluster together based on the biolgical groupings, site and sample collection date we will see if removing data from chip 2 will cause the data to become more spread apart, with greater differences between biological groups.
+
+
+## chip
+
+This time, we see that there are now several chips that group together along PC2 (the secondary source of variation in the experiment). We could try removing these later as well to see if the groupings will improve.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+x<-SLR_matrix_minuscontrols[,c(1:4,9:44)]
 pca = prcomp(t(x))
 names = colnames(x)
 fac= factor(c("1","1","1","1","2","2","2","2","3","3","3","3","4","4","4","4","5","5","5","5","6","6","6","6","7","7","7","7","8","8","8","8",
@@ -457,11 +645,665 @@ xyplot(
 )
 ```
 
+
+
+Here, we will try removing data from chip 10 to see if this will imrove the groupings.
+
+## chip
+
+
+
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
+x<-SLR_matrix_minuscontrols[,c(1:4,9:36,41:44)]
+pca = prcomp(t(x))
+names = colnames(x)
+fac= factor(c("1","1","1","1","2","2","2","2","3","3","3","3","4","4","4","4","5","5","5","5","6","6","6","6","7","7","7","7","8","8","8","8",
+              "9","9","9","9","10","10","10","10","11","11","11","11","12","12","12","12"))
+colours = c("red","blue","green","yellow","orange","purple","black","brown","gray","lightblue","deeppink")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## hyb date
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("5/24/13","5/24/13","5/24/13","5/24/13",
+              "12/5/13","12/5/13","12/5/13","12/5/13",
+              "6/6/13","6/6/13","6/6/13","6/6/13",
+              "6/11/13","6/11/13","6/11/13","6/11/13",
+              "6/11/13","6/11/13","6/11/13","6/11/13",
+              "12/5/13","12/5/13","12/5/13","12/5/13",
+              "5/24/13","5/24/13","5/24/13","5/24/13",
+              "5/30/13","5/30/13","5/30/13","5/30/13",
+              "5/30/13","5/30/13","5/30/13","5/30/13",
+              "6/5/13","6/5/13","6/5/13","6/5/13",
+              "6/6/13","6/6/13","6/6/13","6/6/13"))
+names=fac
+colours = c("red","blue","green","yellow","orange","purple","black","brown")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
 
 ```
 
-# 9. References
+## site
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("South","Ledge","South","Ledge",
+              "Central","South","Ledge","Ledge",
+              "Ledge","South","Central","Ledge",
+              "Central","South","Ledge","South",
+              "South","South","Ledge","South",
+              "Ledge","South","Central","Ledge",
+              "Central","Central","South","Ledge",
+              "South","Ledge","South","South",
+              "Ledge","Central","South","Ledge",
+              "Ledge","South","Central","Ledge",
+              "South","South","Ledge","South"))
+names=fac
+colours = c("red","blue","green")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## date
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("Oct2012","June2012","June2012","JanFeb2013",
+              "JanFeb2013","Oct2012","JanFeb2013","Oct2012",
+              "Oct2012","Oct2012","JanFeb2013","Oct2012",
+              "June2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013",
+              "June2012","June2012","JanFeb2013","JanFeb2013",
+              "June2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013",
+              "Oct2012","JanFeb2013","Oct2012","Oct2012",
+              "Oct2012","June2012","June2012","June2012",
+              "JanFeb2013","JanFeb2013","JanFeb2013","JanFeb2013"))
+names=fac
+colours = c("red","blue","green")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+## var
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+fac= factor(c("South_Oct2012","Ledge_June2012","South_June2012","Ledge_JanFeb2013",
+              "Central_JanFeb2013","South_Oct2012","Ledge_JanFeb2013","Ledge_Oct2012",
+              "Ledge_Oct2012","South_Oct2012","Central_JanFeb2013","Ledge_Oct2012",
+              "Central_June2012","South_June2012","Ledge_June2012","South_June2012",
+              "South_JanFeb2013","South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013",
+              "Ledge_June2012","South_June2012","Central_JanFeb2013","Ledge_JanFeb2013",
+              "Central_June2012","Central_June2012","South_June2012","Ledge_June2012",
+              "South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013","South_JanFeb2013",
+              "Ledge_Oct2012","Central_JanFeb2013","South_Oct2012","Ledge_Oct2012",
+              "Ledge_Oct2012","South_June2012","Central_June2012","Ledge_June2012",
+              "South_JanFeb2013","South_JanFeb2013","Ledge_JanFeb2013","South_JanFeb2013"))
+names=fac
+colours = c("red","blue","green","yellow","deeppink","black","lightblue","purple")
+xyplot(
+  PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=2,
+  panel=function(x, y, ...) {
+    panel.xyplot(x, y, ...);
+    ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=1)
+  },
+  aspect = "fill", col=colours,
+  #main = draw.key(key = list(rect = list(col = list(col=colours), text = list(levels(fac)), rep = FALSE)))
+)
+```
+
+# 6. Transcript-level expression for each chip
+Transcript-level expression variability for each array used in the experiment. There are 150 transcripts represented on the microarray, with 15 spots per transcripts in 5 pieces (3 spots per piece). Box plots are mean, +- sd and min/max expression.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+annotation<-read.csv("mote_09_jpn_annotation.csv")
+# dim(annotation) = 2240
+annotation_minuscontrols<-annotation[!annotation$Probe=="Spkctrl",]
+# dim(annotation_minuscontrols) = 2200
+row.names<-annotation_minuscontrols$Name
+rownames(annotation_minuscontrols)=make.names(row.names,unique=TRUE)
+annotation_minuscontrols_ID<-cbind(annotation_minuscontrols,rownames(annotation_minuscontrols))
+#unique_annotation<-annotation_minuscontrols[!duplicated(annotation$Probe),]
+# dim(unique_annotation) = 150
+col.names1<-c("Spot","Name","Probe","Accession","Gene","Species","Function","Functional_Category","Description","F10","ID")
+colnames(annotation_minuscontrols_ID)<-col.names1
+# remove chips 2 and 10:
+norm_data<-SLR_matrix_minuscontrols[,c(1:4,9:36,41:44)]
+norm_data<-as.data.frame(norm_data)
+norm_data_ID<-cbind(norm_data,rownames(norm_data))
+
+col.names2<-c("1_4","1_3","1_2","1_1","3_4","3_3","3_2","3_1","4_4","4_3","4_2","4_1","5_4","5_3","5_2","5_1","6_4","6_3","6_2","6_1","7_4","7_3","7_2","7_1","8_4","8_3","8_2","8_1","9_4","9_3","9_2","9_1","11_4","11_3","11_2","11_1","ID")
+colnames(norm_data_ID)<-col.names2
+
+norm_data_annotated_all<-merge(norm_data_ID,annotation_minuscontrols_ID,"ID")
+norm_data_annotated<-norm_data_annotated_all[,c(2:37,40)]
+rownames(norm_data_annotated)<-norm_data_annotated_all$ID
+iris.x<-subset(norm_data_annotated,select=-Probe)
+iris.s<-subset(norm_data_annotated,select=Probe)
+mean_probe<-aggregate(iris.x,iris.s,mean)
+sd_probe<-aggregate(iris.x,iris.s,sd)
+
+min.mean.sd.max <- function(x) {
+  r <- c(min(x), mean(x) - sd(x), mean(x), mean(x) + sd(x), max(x))
+  names(r) <- c("ymin", "lower", "middle", "upper", "ymax")
+  r
+}
+
+array_data1<-norm_data_annotated[,c(1,37)]
+colnames(array_data1)<-c("value1","group1")
+array_data1<-as.data.frame(array_data1)
+p1<-ggplot(aes(y=value1,x=factor(group1)),data=array_data1)
+p1<-p1+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("1_4") + xlab("probe") + ylab("log2 expression")
+p1
+
+array_data2<-norm_data_annotated[,c(2,37)]
+colnames(array_data2)<-c("value2","group2")
+array_data<-as.data.frame(array_data2)
+p2<-ggplot(aes(y=value2,x=factor(group2)),data=array_data2)
+p2<-p2+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("1_3") + xlab("probe") + ylab("log2 expression")
+p2
+
+array_data<-norm_data_annotated[,c(3,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p3<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p3<-p3+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("1_2") + xlab("probe") + ylab("log2 expression")
+p3
+
+array_data<-norm_data_annotated[,c(4,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p4<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p4<-p4+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("1_1") + xlab("probe") + ylab("log2 expression")
+p4
+
+array_data<-norm_data_annotated[,c(5,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p5<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p5<-p5+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("3_4") + xlab("probe") + ylab("log2 expression")
+p5
+
+array_data<-norm_data_annotated[,c(6,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p6<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p6<-p6+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("3_3") + xlab("probe") + ylab("log2 expression")
+p6
+
+array_data<-norm_data_annotated[,c(7,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p7<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p7<-p7+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("3_2") + xlab("probe") + ylab("log2 expression")
+p7
+
+array_data<-norm_data_annotated[,c(8,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p8<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p8<-p8+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("3_1") + xlab("probe") + ylab("log2 expression")
+p8
+
+array_data<-norm_data_annotated[,c(9,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p9<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p9<-p9+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("4_4") + xlab("probe") + ylab("log2 expression")
+p9
+
+array_data<-norm_data_annotated[,c(10,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p10<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p10<-p10+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("4_3") + xlab("probe") + ylab("log2 expression")
+p10
+
+array_data<-norm_data_annotated[,c(11,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p11<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p11<-p11+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("4_2") + xlab("probe") + ylab("log2 expression")
+p11
+
+array_data<-norm_data_annotated[,c(12,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p12<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p12<-p12+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("4_1") + xlab("probe") + ylab("log2 expression")
+p12
+
+array_data<-norm_data_annotated[,c(13,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p13<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p13<-p13+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("5_4") + xlab("probe") + ylab("log2 expression")
+p13
+
+array_data<-norm_data_annotated[,c(14,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p14<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p14<-p14+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("5_3") + xlab("probe") + ylab("log2 expression")
+p14
+
+array_data<-norm_data_annotated[,c(15,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p15<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p15<-p15+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("5_2") + xlab("probe") + ylab("log2 expression")
+p15
+
+array_data<-norm_data_annotated[,c(16,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p16<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p16<-p16+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("5_1") + xlab("probe") + ylab("log2 expression")
+p16
+
+array_data<-norm_data_annotated[,c(17,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p17<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p17<-p17+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("6_4") + xlab("probe") + ylab("log2 expression")
+p17
+
+array_data<-norm_data_annotated[,c(18,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p18<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p18<-p18+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("6_3") + xlab("probe") + ylab("log2 expression")
+p18
+
+array_data<-norm_data_annotated[,c(19,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p19<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p19<-p19+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("6_2") + xlab("probe") + ylab("log2 expression")
+p19
+
+array_data<-norm_data_annotated[,c(20,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p20<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p20<-p20+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("6_1") + xlab("probe") + ylab("log2 expression")
+p20
+
+array_data<-norm_data_annotated[,c(21,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p21<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p21<-p21+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("7_4") + xlab("probe") + ylab("log2 expression")
+p21
+
+array_data<-norm_data_annotated[,c(22,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p22<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p22<-p22+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("7_3") + xlab("probe") + ylab("log2 expression")
+p22
+
+array_data<-norm_data_annotated[,c(23,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p23<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p23<-p23+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("7_2") + xlab("probe") + ylab("log2 expression")
+p23
+
+array_data<-norm_data_annotated[,c(24,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p24<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p24<-p24+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("7_1") + xlab("probe") + ylab("log2 expression")
+p24
+
+array_data<-norm_data_annotated[,c(25,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p25<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p25<-p25+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("8_4") + xlab("probe") + ylab("log2 expression")
+p25
+
+array_data<-norm_data_annotated[,c(26,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p26<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p26<-p26+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("8_3") + xlab("probe") + ylab("log2 expression")
+p26
+
+array_data<-norm_data_annotated[,c(27,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p27<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p27<-p27+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("8_2") + xlab("probe") + ylab("log2 expression")
+p27
+
+array_data<-norm_data_annotated[,c(28,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p28<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p28<-p28+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("8_1") + xlab("probe") + ylab("log2 expression")
+p28
+
+array_data<-norm_data_annotated[,c(29,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p29<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p29<-p29+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("9_4") + xlab("probe") + ylab("log2 expression")
+p29
+
+array_data<-norm_data_annotated[,c(30,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p30<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p30<-p30+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("9_3") + xlab("probe") + ylab("log2 expression")
+p30
+
+array_data<-norm_data_annotated[,c(31,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p31<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p31<-p31+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("9_2") + xlab("probe") + ylab("log2 expression")
+p31
+
+array_data<-norm_data_annotated[,c(32,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p32<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p32<-p32+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("9_1") + xlab("probe") + ylab("log2 expression")
+p32
+
+array_data<-norm_data_annotated[,c(33,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p33<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p33<-p33+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("11_4") + xlab("probe") + ylab("log2 expression")
+p33
+
+
+array_data<-norm_data_annotated[,c(34,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p34<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p34<-p34+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("11_3") + xlab("probe") + ylab("log2 expression")
+p34
+
+array_data<-norm_data_annotated[,c(35,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p35<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p35<-p35+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("11_2") + xlab("probe") + ylab("log2 expression")
+p35
+
+array_data<-norm_data_annotated[,c(36,37)]
+colnames(array_data)<-c("value","group")
+array_data<-as.data.frame(array_data)
+p36<-ggplot(aes(y=value,x=factor(group)),data=array_data)
+p36<-p36+stat_summary(fun.data = min.mean.sd.max, geom = "boxplot") + geom_jitter(position=position_jitter(width=.2),size=3)+ggtitle("11_1") + xlab("probe") + ylab("log2 expression")
+p36
+
+```
+
+# Results
+
+These data do not group strongly by the biological variables: site, date, or combined site-date. We will make comparisons anyway to see if there are differences. 
+
+Here we will create an interaction model, assuming a factorial design for the experiment. This is a 3 x 3 factorial design, even though there were no samples collected at the central site in Oct 2012. Differential expression models work by taking multiple pairwise comparisons, then looking at the overlap between the comparisons.
+
+### By Transcript, 150 transcripts total on the array
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# remove chips 2 and 10
+norm_data<-SLR_matrix_minuscontrols[,c(1:4,9:36,41:44)]
+norm_data<-as.data.frame(norm_data)
+norm_data_ID<-cbind(norm_data,rownames(norm_data))
+col.names2<-c("1_4","1_3","1_2","1_1","3_4","3_3","3_2","3_1","4_4","4_3","4_2","4_1","5_4","5_3","5_2","5_1","6_4","6_3","6_2","6_1","7_4","7_3","7_2","7_1","8_4","8_3","8_2","8_1","9_4","9_3","9_2","9_1","11_4","11_3","11_2","11_1","ID")
+colnames(norm_data_ID)<-col.names2
+norm_data_annotated_all<-merge(norm_data_ID,annotation_minuscontrols_ID,"ID")
+norm_data_annotated<-norm_data_annotated_all[,c(2:37,40)]
+rownames(norm_data_annotated)<-norm_data_annotated_all$ID
+iris.x<-subset(norm_data_annotated,select=-Probe)
+iris.s<-subset(norm_data_annotated,select=Probe)
+mean_probe<-aggregate(iris.x,iris.s,mean)
+sd_probe<-aggregate(iris.x,iris.s,sd)
+rownames(mean_probe)<-mean_probe$Probe
+mean_probe<-mean_probe[,-1]
+
+
+# remove chips 2 and 10 from sample info:
+sample_info_dataframe<-sample_info_dataframe[c(1:4,9:36,41:44),]
+
+
+## Design - Site
+var<-paste(sample_info_dataframe$Site,sample_info_dataframe$Date,sep=".")
+var<-factor(var)
+design<-model.matrix(~0+var)
+colnames(design)<-levels(var)
+# fits a model with 8 coefficients corresponding to each factor
+fit<-lmFit(mean_probe,design)
+cont.matrix<-makeContrasts(
+  JunvsJanFebinCentral=Central.Jun12-Central.JanFeb13,
+  JunvsJanFebinLedge=Ledge.Jun12-Ledge.JanFeb13,
+  OctvsJanFebinLedge=Ledge.Oct12-Ledge.JanFeb13,
+  JunvsJanFebinSouth=South.Jun12-South.JanFeb13,
+  OctvsJanFebinSouth=South.Oct12-South.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+## Design - Months
+
+cont.matrix<-makeContrasts(
+  LedgevsSouthinOct=Ledge.Oct12-South.Oct12,
+  CentralvsSouthinJun=Central.Jun12-South.Jun12,
+  CentralvsLedgeinJun=Central.Jun12-Ledge.Jun12,
+  CentralvsSouthinJanFeb=Central.JanFeb13-South.JanFeb13,
+  CentralvsLedgeinJanFeb=Central.JanFeb13-Ledge.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+### By probe, 726 probes on the array
+
+Mean of each probe piece (5 pieces per transcript) to see if there are measureable expression differences between groups. There are 726 probes per array.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# remove chips 2 and 10
+norm_data<-SLR_matrix_minuscontrols[,c(1:4,9:36,41:44)]
+norm_data<-as.data.frame(norm_data)
+norm_data_ID<-cbind(norm_data,rownames(norm_data))
+col.names2<-c("1_4","1_3","1_2","1_1","3_4","3_3","3_2","3_1","4_4","4_3","4_2","4_1","5_4","5_3","5_2","5_1","6_4","6_3","6_2","6_1","7_4","7_3","7_2","7_1","8_4","8_3","8_2","8_1","9_4","9_3","9_2","9_1","11_4","11_3","11_2","11_1","ID")
+colnames(norm_data_ID)<-col.names2
+norm_data_annotated_all<-merge(norm_data_ID,annotation_minuscontrols_ID,"ID")
+norm_data_annotated<-norm_data_annotated_all[,c(2:37,39)]
+rownames(norm_data_annotated)<-norm_data_annotated_all$ID
+iris.x<-subset(norm_data_annotated,select=-Name)
+iris.s<-subset(norm_data_annotated,select=Name)
+mean_probe<-aggregate(iris.x,iris.s,mean)
+sd_probe<-aggregate(iris.x,iris.s,sd)
+rownames(mean_probe)<-mean_probe$Name
+mean_probe<-mean_probe[,-1]
+
+
+# remove chips 2 and 10 from sample info:
+sample_info_dataframe<-sample_info_dataframe[c(1:4,9:36,41:44),]
+
+
+## Design
+var<-paste(sample_info_dataframe$Site,sample_info_dataframe$Date,sep=".")
+var<-factor(var)
+design<-model.matrix(~0+var)
+colnames(design)<-levels(var)
+# fits a model with 8 coefficients corresponding to each factor
+fit<-lmFit(mean_probe,design)
+cont.matrix<-makeContrasts(
+  JunvsJanFebinCentral=Central.Jun12-Central.JanFeb13,
+  JunvsJanFebinLedge=Ledge.Jun12-Ledge.JanFeb13,
+  OctvsJanFebinLedge=Ledge.Oct12-Ledge.JanFeb13,
+  JunvsJanFebinSouth=South.Jun12-South.JanFeb13,
+  OctvsJanFebinSouth=South.Oct12-South.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+## Design - Months
+
+cont.matrix<-makeContrasts(
+  LedgevsSouthinOct=Ledge.Oct12-South.Oct12,
+  CentralvsSouthinJun=Central.Jun12-South.Jun12,
+  CentralvsLedgeinJun=Central.Jun12-Ledge.Jun12,
+  CentralvsSouthinJanFeb=Central.JanFeb13-South.JanFeb13,
+  CentralvsLedgeinJanFeb=Central.JanFeb13-Ledge.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+### By Function, 29 functions on the array
+
+For example, nucleic acid modification, growth & development, etc.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+# remove chips 2 and 10
+norm_data<-SLR_matrix_minuscontrols[,c(1:4,9:36,41:44)]
+norm_data<-as.data.frame(norm_data)
+norm_data_ID<-cbind(norm_data,rownames(norm_data))
+col.names2<-c("1_4","1_3","1_2","1_1","3_4","3_3","3_2","3_1","4_4","4_3","4_2","4_1","5_4","5_3","5_2","5_1","6_4","6_3","6_2","6_1","7_4","7_3","7_2","7_1","8_4","8_3","8_2","8_1","9_4","9_3","9_2","9_1","11_4","11_3","11_2","11_1","ID")
+colnames(norm_data_ID)<-col.names2
+norm_data_annotated_all<-merge(norm_data_ID,annotation_minuscontrols_ID,"ID")
+norm_data_annotated<-norm_data_annotated_all[,c(2:37,44)]
+rownames(norm_data_annotated)<-norm_data_annotated_all$ID
+iris.x<-subset(norm_data_annotated,select=-Function)
+iris.s<-subset(norm_data_annotated,select=Function)
+mean_probe<-aggregate(iris.x,iris.s,mean)
+sd_probe<-aggregate(iris.x,iris.s,sd)
+rownames(mean_probe)<-mean_probe$Name
+mean_probe<-mean_probe[,-1]
+
+
+# remove chips 2 and 10 from sample info:
+sample_info_dataframe<-sample_info_dataframe[c(1:4,9:36,41:44),]
+
+
+## Design
+var<-paste(sample_info_dataframe$Site,sample_info_dataframe$Date,sep=".")
+var<-factor(var)
+design<-model.matrix(~0+var)
+colnames(design)<-levels(var)
+# fits a model with 8 coefficients corresponding to each factor
+fit<-lmFit(mean_probe,design)
+cont.matrix<-makeContrasts(
+  JunvsJanFebinCentral=Central.Jun12-Central.JanFeb13,
+  JunvsJanFebinLedge=Ledge.Jun12-Ledge.JanFeb13,
+  OctvsJanFebinLedge=Ledge.Oct12-Ledge.JanFeb13,
+  JunvsJanFebinSouth=South.Jun12-South.JanFeb13,
+  OctvsJanFebinSouth=South.Oct12-South.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+cont.matrix<-makeContrasts(
+  LedgevsSouthinOct=Ledge.Oct12-South.Oct12,
+  CentralvsSouthinJun=Central.Jun12-South.Jun12,
+  CentralvsLedgeinJun=Central.Jun12-Ledge.Jun12,
+  CentralvsSouthinJanFeb=Central.JanFeb13-South.JanFeb13,
+  CentralvsLedgeinJanFeb=Central.JanFeb13-Ledge.JanFeb13,
+  levels=design
+  )
+fit2<-contrasts.fit(fit,cont.matrix)
+fit2<-eBayes(fit2)
+results<-decideTests(fit2)
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+vennDiagram(results)
+```
+
+# 9. Comments
+
+After looking over these results, let me know if you agree with the analysis methods or have any questions. Please feel free to suggest alternative methods.
+
+# 10. Contact
+
+Lisa Cohen,
+Ph.D. student MCIP,
+University of California, Davis
+ljcohen@ucdavis.edu
+321-427-9335
+
+# 11. References
 
 Izarry RA, Hobbs B, Collin F, Beazer-Barclay YD, Antonellis KJ, Scherf U, Speed TP. (2003). Exploration, normalization, and summaries of high density oligonucleotide array probe level data. Biostatistics. 2003 Apr;4(2):249-64. http://www.ncbi.nlm.nih.gov/pubmed/12925520
 
