@@ -33,6 +33,8 @@ The alignment program, Bowtie (version 1.0.0) was used with reads mapped to the 
 
 Here, data analysis is presented from the in vivo experiment. Data analysis for the in vitro experiment can be accessed here:
 
+http://ljcohen.github.io/analyses/Blanco/Blanco_RNAseq_report_invitro.html
+
 
 Filenames containing raw transcript counts from htseq-count are as follows:
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}

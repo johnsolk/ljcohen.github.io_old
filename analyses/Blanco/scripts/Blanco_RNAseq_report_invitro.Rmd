@@ -30,8 +30,9 @@ https://basespace.illumina.com/s/nhKGfWNebV5Q
 
 The alignment program, Bowtie (version 1.0.0) was used with reads mapped to the UCSC mm9 gff (iGenome version) with two mismatches allowed. The uniquely-mapped reads were subjected to subsequent necessary processing, including removal of PCR duplicates, before transcripts were counted with htseq-count. Counts files were imported into the R statistical programming environment and analyzed with the DESeq2 R/Bioconductor package (Love et al. 2014).
 
-Here, data analysis is presented from the in vitro experiment. Data analysis for the in vitro experiment can be accessed here:
+Here, data analysis is presented from the in vitro experiment. Data analysis for the in vivo experiment can be accessed here:
 
+http://ljcohen.github.io/analyses/Blanco/index.html
 
 Filenames containing raw transcript counts from htseq-count are as follows:
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
