@@ -1,0 +1,256 @@
+---
+title: "Dasen lab, Pbx-mutant RNAseq", brachial
+author: "Lisa Cohen"
+output: html_document
+---
+
+Analysis file available for download here:
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Dasen/
+
+Scripts associated with these analyses can be accessed here:
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Dasen/scripts/
+
+# Introduction
+
+This is an RNASeq differential expression analysis from paired-end 50 data from an Illumina HiSeq 2500 high-output sequencing run, Combo_HSQ_24 that took place at the NYU Genome Technology Center on November 18, 2014. The experiment consisted of RNA extracted from mutant mouse cells (TH-A-Mutant, TH-B-Mutant, TH-C-Mutant) compared to control (TH-A-Control, TH-B-Control, TH-C-Control). 
+
+The BaseSpace link with run quality information is here:
+https://basespace.illumina.com/s/nblJAnaXNEuX
+
+# Table of Contents:
+1. Data Analysis Procedure
+2. PCA
+3. MA plots
+4. Heatmap
+5. Contact
+6. References
+
+# 1. Data analysis procedure
+
+For CPM data, the alignment program, Bowtie (version 1.0.0) was used with reads mapped to the Ensemble NCBIM37/mm9 (iGenome version) with two mismatches allowed. The uniquely-mapped reads were subjected to subsequent necessary processing, including removal of PCR duplicates, before transcripts were counted with htseq-count. Counts files were imported into the R statistical programming environment and analyzed with the DESeq2 R/Bioconductor package (Love et al. 2014).
+
+Here, data analysis is presented from the thoarcic level. Data analysis for the thoracic level can be accessed here:
+
+http://ljcohen.github.io/analyses/Dasen/Dasen_RNAseq_report_brachial.Rmd
+
+
+Filenames containing raw transcript counts from htseq-count are as follows:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(DESeq2)
+library("GenomicFeatures")
+library("genefilter")
+library(gplots)
+library(RColorBrewer)
+library(biomaRt)
+library("genefilter")
+library("lattice")
+source('~/Documents/scripts/plotPCAWithSampleNames.R')
+setwd("~/Documents/NYUMC/Dasen/thoracic/htseq_counts")
+mypath<-"~/Documents/NYUMC/Dasen/thoracic/htseq_counts"
+filenames<-list.files(path=mypath, pattern= "_counts.txt", full.names=FALSE)
+datalist <-lapply(filenames, function(x){read.table(x,header=FALSE, sep="\t")})
+for (i in 1:length(filenames))
+{
+  colnames(datalist[[i]])<-c("ID",filenames[[i]])
+}
+mergeddata <- Reduce(function(x,y) {merge(x,y, by="ID")}, datalist)
+new_data_merge<-mergeddata[-1:-5,]
+#write.csv(new_data_merge,file="Dasen_thoracic_count_data_Ensembl.csv")
+rownames(new_data_merge)<-new_data_merge$ID
+new_data_merge<-new_data_merge[,-1]
+data<-new_data_merge
+colnames(data)
+col.names<-c("TH-A-Control","TH-A-Mutant","TH-B-Control","TH-B-Mutant","TH-C-Control","TH-C-Mutant")
+colnames(data)<-col.names
+```
+
+
+# 2. PCA
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ExpDesign <- data.frame(row.names=colnames(data), condition = c("Control","Mutant","Control","Mutant","Control","Mutant"))
+cds<-DESeqDataSetFromMatrix(countData=data, colData=ExpDesign,design=~condition)
+cds$condition <- relevel(cds$condition, "Control")
+cds<-DESeq(cds, betaPrior=FALSE)
+# log2 transformation for PCA plot
+log_cds<-rlog(cds)
+#plotPCAWithSampleNames(log_cds,intgroup="condition",ntop=40000)
+
+##
+x<-log_cds
+ntop=40000
+intgroup<-"condition"
+rv = rowVars(assay(x))
+select = order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
+pca = prcomp(t(assay(x)[select,]))
+  
+# extract sample names
+names = colnames(x)
+  
+fac = factor(apply( as.data.frame(colData(x)[, intgroup, drop=FALSE]), 1, paste, collapse=" : "))
+  
+colours = c( "dodgerblue3", "firebrick3" )
+  
+xyplot(
+PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=1.5,panel=function(x, y, ...) {
+      panel.xyplot(x, y, ...);
+      ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=0.7)
+    },
+aspect = "fill", col=colours,
+main = draw.key(key = list(
+      rect = list(col = colours),
+      text = list(levels(fac)),
+      rep = FALSE)))
+
+```
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# get norm counts
+norm_counts<-counts(cds,normalized=TRUE)
+norm_counts_data<-as.data.frame(norm_counts)
+ensembl_id<-rownames(norm_counts)
+norm_counts_data<-cbind(ensembl_id,norm_counts_data)
+filtered_norm_counts<-norm_counts_data[!rowSums(norm_counts_data[,2:7]==0)>=1, ]
+```
+
+
+# 3. MA plots
+
+The size of the table with all transcripts is: 
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# get gene name from Ensembl gene ID
+ensembl=useMart("ensembl")
+ensembl = useDataset("mmusculus_gene_ensembl",mart=ensembl)
+data_table<-filtered_norm_counts
+
+query<-getBM(attributes=c('ensembl_gene_id','external_gene_name','gene_biotype'), filters = 'ensembl_gene_id', values = ensembl_id, mart=ensembl)
+col.names<-c("ensembl_id","external_gene_id","gene_biotype")
+colnames(query)<-col.names
+merge_biomart_res_counts <- merge(data_table,query,by="ensembl_id")
+temp_data_merged_counts<-merge_biomart_res_counts
+
+##
+res<-results(cds,contrast=c("condition","Mutant","Control"))
+res_ordered<-res[order(res$padj),]
+ensembl_id<-rownames(res_ordered)
+res_ordered<-as.data.frame(res_ordered)
+res_ordered<-cbind(res_ordered,ensembl_id)
+merge_biomart_res_counts <- merge(temp_data_merged_counts,res_ordered,by="ensembl_id")
+merge_biomart_res_all<-subset(merge_biomart_res_counts,merge_biomart_res_counts$padj!="NA")
+merge_biomart_res_all<-merge_biomart_res_all[order(merge_biomart_res_all$padj),]
+dim(merge_biomart_res_all)
+```
+
+The size of the table with only significant transcripts, padj<0.05 is:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+res_merged_cutoff<-subset(merge_biomart_res_all,merge_biomart_res_all$padj<0.05)
+dim(res_merged_cutoff)
+plot(log2(res$baseMean), res$log2FoldChange, col=ifelse(res$padj < 0.05, "red","gray67"),main="(DESeq2) Brachial Mutant vs. Control (padj<0.05)",xlim=c(1,15),pch=20,cex=1)
+abline(h=c(-1,1), col="blue")
+```
+
+
+# 4. Heatmap
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+up_down_1FC<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange>1 | res_merged_cutoff$log2FoldChange< -1)
+#d<-up_down_1FC
+d<-as.matrix(up_down_1FC[,c(2:7)])
+rownames(d) <- up_down_1FC[,8]
+d<-na.omit(d)
+d<-d[,c(1,3,5,2,4,6)]
+colnames(d)<-c("TH-A-Control","TH-B-Control","TH-C-Control","TH-A-Mutant","TH-B-Mutant","TH-C-Mutant")
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+#png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
+heatmap.2(d, main="Pbx Mutant-Thoracic vs. Control, padj<0.05", 
+          Rowv=as.dendrogram(hr),
+          cexRow=1,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, 
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none", RowSideColors= myClusterSideBar)
+###
+up<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange>1)
+#d<-up_down_1FC
+d<-as.matrix(up[,c(2:7)])
+rownames(d) <- up[,8]
+d<-na.omit(d)
+d<-d[,c(1,3,5,2,4,6)]
+colnames(d)<-c("TH-A-Control","TH-B-Control","TH-C-Control","TH-A-Mutant","TH-B-Mutant","TH-C-Mutant")
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+#png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
+heatmap.2(d, main="Pbx Mutant-Thoracic vs. Control, padj<0.05, log2FC>0", 
+          Rowv=as.dendrogram(hr),
+          cexRow=1,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, 
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none", RowSideColors= myClusterSideBar)
+###
+down<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange< -1)
+d<-as.matrix(down[,c(2:7)])
+rownames(d) <- down[,8]
+d<-na.omit(d)
+d<-d[,c(1,3,5,2,4,6)]
+colnames(d)<-c("TH-A-Control","TH-B-Control","TH-C-Control","TH-A-Mutant","TH-B-Mutant","TH-C-Mutant")
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+#png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
+heatmap.2(d, main="Pbx Mutant-Thoracic vs. Control, padj<0.05, log2FC<1", 
+          Rowv=as.dendrogram(hr),
+          cexRow=1,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, 
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none", RowSideColors= myClusterSideBar)
+```
+
+
+# 5. Contact
+
+Lisa Cohen, PhD student in MCIP, UC Davis     
+Phone: 321-427-9335       
+Email: ljcohen@ucdavis.edu
+
+### Sequencing and original bioinformatics analysis by:
+
+NYU Langone Medical Center   
+Bioinformatics Core, Genome Technology Center, OCS   
+Email: Genomics@nyumc.org         
+Phone: 646-501-2834   
+http://ocs.med.nyu.edu/bioinformatics-core  
+http://ocs.med.nyu.edu/genome-technology-center   
+
+Dr. Steven Shen, Associate Professor      
+Email: ShuQuan.Shen@nyumc.org  
+Phone: 212-263-2234           
+Genome Technology Center, Office of Collaborative Sciences
+and Center for Health Informatics and Bioinformatics
+NYU School of Medicine,
+227 E30th Street, Room 748, 
+New York, NY 10016
+
+
+
+# 6. References
+
+M. I. Love, W. Huber, S. Anders: Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.
+Genome Biology 2014, 15:550. http://dx.doi.org/10.1186/s13059-014-0550-8
+
+R-Bioconductor: http://www.bioconductor.org/
+
+DESeq2: http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf
