@@ -1,8 +1,6 @@
 # Site settings
-title: Lisa Johnson Cohen
 email: ljcohen@ucdavis.edu
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://ljcohen.github.io/" # the base hostname & protocol for your site
+url: "http://ljcohen.github.io/"
 twitter_username: monsterbashseq
 github_username:  ljcohen
 
