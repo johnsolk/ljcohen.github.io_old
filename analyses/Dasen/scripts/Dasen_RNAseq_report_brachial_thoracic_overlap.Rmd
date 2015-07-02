@@ -1,8 +1,12 @@
 ---
-title: "Dasen lab, Pbx-mutant RNAseq", brachial
+title: "Dasen lab, Pbx-mutant RNAseq", brachial/thoracic overlap
 author: "Lisa Cohen"
 output: html_document
 ---
+
+.Rmd script used to generate this page here:
+https://github.com/ljcohen/ljcohen.github.io/blob/master/analyses/Dasen/scripts/Dasen_RNAseq_report_brachial_thoracic_overlap.Rmd
+
 
 Filenames for brachial-level transcripts are here:
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
