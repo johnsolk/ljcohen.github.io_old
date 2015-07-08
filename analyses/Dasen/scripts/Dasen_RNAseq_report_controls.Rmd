@@ -156,7 +156,6 @@ res_merged_cutoff<-subset(merge_biomart_res_all,merge_biomart_res_all$padj<0.05)
 dim(res_merged_cutoff)
 genes=c("Efnb2")
 plot(log2(merge_biomart_res_all$baseMean), merge_biomart_res_all$log2FoldChange, col=ifelse(merge_biomart_res_all$padj < 0.05, "red","gray67"),main="(DESeq2) Brachial Control vs. Thoracic Control (padj<0.05)",xlim=c(1,15),pch=20,cex=1)
-text(log2(merge_biomart_res_all$baseMean), merge_biomart_res_all$log2FoldChange,ifelse(row.names(res_merged_cutoff) %in% genes,cex=1,pos=4,col="black")
 abline(h=c(-1,1), col="blue")
 ```
 
@@ -173,7 +172,7 @@ hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
 mycl <- cutree(hr, h=max(hr$height/1.5))
 clusterCols <- rainbow(length(unique(mycl)))
 myClusterSideBar <- clusterCols[mycl]
-myheatcol <- redgreen(75)
+myheatcol <- greenred(75)
 tiff("Controls_heatmap.tiff", width = 1000,height = 1000,units="px",res = NA,pointsize=12) 
 heatmap.2(d, 
           Rowv=as.dendrogram(hr),

@@ -170,7 +170,7 @@ vennPlot(counts=counts)
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 # extract intersections for up:
-Brachial_Thoracic<-OLlist$Venn_List$Brachial_ControlThoracic_Control
+Brachial_Thoracic<-OLlist$Venn_List$Brachial_v_ControlThoracic_v_Control
 Brachial_Overlap<-res1_filtered_padj[res1_filtered_padj$external_gene_id %in% Brachial_Thoracic,]
 Thoracic_Overlap<-res2_filtered_padj[res2_filtered_padj$external_gene_id %in% Brachial_Thoracic,]
 Brachial_Thoracic_results<-merge(Brachial_Overlap,Thoracic_Overlap,by="ensembl_id")
@@ -189,8 +189,8 @@ hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
 mycl <- cutree(hr, h=max(hr$height/1.5))
 clusterCols <- rainbow(length(unique(mycl)))
 myClusterSideBar <- clusterCols[mycl]
-myheatcol <- redgreen(75)
-#png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
+myheatcol <- greenred(75)
+tiff("Overlap_heatmap.tiff", width = 1000,height = 1000,units="px",res = NA,pointsize=12)
 heatmap.2(d, 
           Rowv=as.dendrogram(hr),
           cexRow=1,cexCol=0.8,srtCol= 90,
@@ -199,6 +199,7 @@ heatmap.2(d,
           scale="row", col=myheatcol, 
           density.info="none", 
           trace="none")
+dev.off()
 ###
 
 ```
