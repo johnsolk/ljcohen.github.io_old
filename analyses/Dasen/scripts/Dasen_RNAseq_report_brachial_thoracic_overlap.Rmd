@@ -162,7 +162,7 @@ source('~/Documents/scripts/overLapper_original.R')
 m<-res1_filtered_padj$external_gene_id
 # thoracic
 n<-res2_filtered_padj$external_gene_id
-setlist <- list(Brachial_Control=as.vector(m),Thoracic_Control=as.vector(n))
+setlist <- list(Brachial_v_Control=as.vector(m),Thoracic_v_Control=as.vector(n))
 OLlist <- overLapper(setlist=setlist, sep="", type="vennsets")
 counts <- sapply(OLlist$Venn_List, length)
 vennPlot(counts=counts)
@@ -189,16 +189,16 @@ hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
 mycl <- cutree(hr, h=max(hr$height/1.5))
 clusterCols <- rainbow(length(unique(mycl)))
 myClusterSideBar <- clusterCols[mycl]
-myheatcol <- greenred(75)
+myheatcol <- redgreen(75)
 #png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
-heatmap.2(d, main="Pbx Mutant-Thoracic vs. Control and Mutant-Brachial vs. Control, padj<0.05", 
+heatmap.2(d, 
           Rowv=as.dendrogram(hr),
           cexRow=1,cexCol=0.8,srtCol= 90,
-          adjCol = c(NA,0),offsetCol=2.5, 
+          adjCol = c(NA,0),offsetCol=2.5,offsetRow=0.1,
           Colv=NA, dendrogram="row", 
           scale="row", col=myheatcol, 
           density.info="none", 
-          trace="none", RowSideColors= myClusterSideBar)
+          trace="none")
 ###
 
 ```

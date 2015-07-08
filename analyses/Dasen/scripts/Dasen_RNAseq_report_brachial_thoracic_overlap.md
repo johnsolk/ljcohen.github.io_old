@@ -61,10 +61,24 @@ The size of the thoracic table with only significant transcripts, padj<0.05 is:
 
 
 ```
-## NULL
+## Error in hclust(as.dist(1 - cor(t(d), method = "pearson")), method = "complete"): must have n >= 2 objects to cluster
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+```
+## Error in nrow(tree$merge): object 'hr' not found
+```
+
+```
+## Error in unique(mycl): error in evaluating the argument 'x' in selecting a method for function 'unique': Error: object 'mycl' not found
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'clusterCols' not found
+```
+
+```
+## Error in as.dendrogram(hr): object 'hr' not found
+```
 
 File:
 

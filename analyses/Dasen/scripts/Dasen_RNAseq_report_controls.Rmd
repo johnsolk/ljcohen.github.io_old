@@ -4,6 +4,8 @@ author: "Lisa Cohen"
 output: html_document
 ---
 
+
+
 All analysis file available for download here:
 https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Dasen/
 
@@ -75,7 +77,6 @@ colnames(data)<-col.names
 # 2. PCA
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
-ExpDesign <- data.frame(row.names=colnames(data), condition = c("Control","Mutant","Control","Mutant","Control","Mutant"))
 ExpDesign <- data.frame(row.names=colnames(data), condition = c("BR-Control","BR-Control","BR-Control","TH-Control","TH-Control","TH-Control"))
 cds<-DESeqDataSetFromMatrix(countData=data, colData=ExpDesign,design=~condition)
 cds$condition <- relevel(cds$condition, "TH-Control")
@@ -153,7 +154,9 @@ The size of the table with only significant transcripts, padj<0.05 is:
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 res_merged_cutoff<-subset(merge_biomart_res_all,merge_biomart_res_all$padj<0.05)
 dim(res_merged_cutoff)
-plot(log2(res$baseMean), res$log2FoldChange, col=ifelse(res$padj < 0.05, "red","gray67"),main="(DESeq2) (DESeq2) Brachial Control vs. Thoracic Control (padj<0.05)",xlim=c(1,15),pch=20,cex=1)
+genes=c("Efnb2")
+plot(log2(merge_biomart_res_all$baseMean), merge_biomart_res_all$log2FoldChange, col=ifelse(merge_biomart_res_all$padj < 0.05, "red","gray67"),main="(DESeq2) Brachial Control vs. Thoracic Control (padj<0.05)",xlim=c(1,15),pch=20,cex=1)
+text(log2(merge_biomart_res_all$baseMean), merge_biomart_res_all$log2FoldChange,ifelse(row.names(res_merged_cutoff) %in% genes,cex=1,pos=4,col="black")
 abline(h=c(-1,1), col="blue")
 ```
 
@@ -170,16 +173,17 @@ hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
 mycl <- cutree(hr, h=max(hr$height/1.5))
 clusterCols <- rainbow(length(unique(mycl)))
 myClusterSideBar <- clusterCols[mycl]
-myheatcol <- greenred(75)
-#png("Cd_heatmap.png", width = 7*300,height = 7*300,res = 1200,pointsize = 2) 
-heatmap.2(d, main="Brachial-Control vs. Thoracic-Control, padj<0.05", 
+myheatcol <- redgreen(75)
+tiff("Controls_heatmap.tiff", width = 1000,height = 1000,units="px",res = NA,pointsize=12) 
+heatmap.2(d, 
           Rowv=as.dendrogram(hr),
           cexRow=1,cexCol=0.8,srtCol= 90,
-          adjCol = c(NA,0),offsetCol=2.5, 
+          adjCol = c(NA,0),offsetCol=2.6,offsetRow=0.1, 
           Colv=NA, dendrogram="row", 
           scale="row", col=myheatcol, 
           density.info="none", 
-          trace="none", RowSideColors= myClusterSideBar)
+          trace="none")
+dev.off()
 ###
 up<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange>1)
 #d<-up_down_1FC
@@ -199,7 +203,7 @@ heatmap.2(d, main="Brachial-Control vs. Thoracic-Control, padj<0.05, log2FC>1",
           Colv=NA, dendrogram="row", 
           scale="row", col=myheatcol, 
           density.info="none", 
-          trace="none", RowSideColors= myClusterSideBar)
+          trace="none")
 ###
 down<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange< -1)
 d<-as.matrix(down[,c(2:7)])
