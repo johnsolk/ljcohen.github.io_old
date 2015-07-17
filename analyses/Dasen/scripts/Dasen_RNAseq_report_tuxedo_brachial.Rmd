@@ -1,0 +1,169 @@
+---
+title: "Dasen lab, Pbx-mutant RNAseq", brachial
+author: "Lisa Cohen"
+output: html_document
+---
+
+The script used to generate this report can be accessed here:
+https://github.com/ljcohen/ljcohen.github.io/blob/master/analyses/Dasen/scripts/Dasen_RNAseq_report_tuxedo_brachial.Rmd
+
+
+# Introduction
+
+This is an RNASeq differential expression analysis from paired-end 50 data from an Illumina HiSeq 2500 high-output sequencing run, Combo_HSQ_10 that took place at the NYU Genome Technology Center on August 27, 2014. The experiment consisted of RNA extracted from Pbx mutant mouse cells (BR-A-Mutant, BR-B-Mutant, BR-C-Mutant) compared to control (BR-A-Control, BR-B-Control, BR-C-Control).
+
+The BaseSpace link with run quality information is here:
+https://basespace.illumina.com/s/xMRkLIeLf5Rn
+
+
+# Table of Contents:
+1. Data Analysis Procedure
+2. MDS plot
+3. MA plot
+4. Heatmap
+5. Contact
+6. References
+
+# 1. Data analysis procedure
+
+The tuxedo RNASeq protocol was used for differential expression analysis.  The alignment program, Tophat (version 2.0.9), which uses bowtie2 (version 2.1.0), was used for reads mapping to the Ensemble NCBIM37/mm9 (iGenome version) reference genome. The mapped reads were subjected to subsequent necessary processing and PCR duplicates removal. For the differential gene statistical analysis, cufflinks (version 2.2.0) was used to assemble transcripts and calculate expression as Fragments Per Kilobase of transcript per Million mapped reads (FPKM). Tables with FPKM values for each sample replicate were generated with the cummerbund Bioconductor package in the R statistical programming environment.
+
+Here, data analysis is presented from the brachial level.
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(cummeRbund)
+library(biomaRt)
+library(gplots)
+library(RColorBrewer)
+library(biomaRt)
+library("genefilter")
+library("lattice")
+setwd("~/Documents/NYUMC/Dasen/brachial/cuffdiff_output_1")
+cuff<-readCufflinks()
+cuff
+```
+
+
+# 2. MDS
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+a<-genes(cuff)
+dat<-repFpkmMatrix(a)
+dat<-log10(dat+1)
+dat.filt <- apply(dat,1,function(row) all(row!=0))
+dat<-dat[dat.filt,]
+d<-JSdist(makeprobs(dat))
+fit <- cmdscale(d,eig=TRUE, k=2)
+rownames(fit$points)<-c("BR-C-Mutant", "BR-A-Mutant", "BR-B-Mutant", "BR-C-Control", "BR-B-Control", "BR-A-Control")
+res<-data.frame(names=rownames(fit$points),M1=fit$points[,1],M2=fit$points[,2])
+p <- ggplot(res)
+p <- p + geom_point(aes(x=M1,y=M2,label=names,color=names)) + geom_text(aes(x=M1,y=M2,label=names,color=names)) + theme_bw()
+p
+
+```
+
+
+# 3. MA plots
+
+Size of results with all transcripts, no filtering:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+mySigMat<-sigMatrix(cuff,level='genes',alpha=0.05,)
+genes.scv<-fpkmSCVPlot(genes(cuff))
+isoforms.scv<-fpkmSCVPlot(isoforms(cuff))
+# FPKM values as gene by replicate (repFpkmMatrix) matrix
+gene.rep.matrix<-repFpkmMatrix(genes(cuff))
+isoforms.rep.matrix<-repFpkmMatrix(isoforms(cuff))
+orig_isoforms<-read.csv("~/Documents/NYUMC/Dasen/brachial/cuffdiff_output_1/isoform_exp.diff", sep="\t")
+orig_genes<-read.csv("~/Documents/NYUMC/Dasen/brachial/cuffdiff_output_1/gene_exp.diff",sep="\t")
+customnames_2<- c("BR-C-Mutant", "BR-A-Mutant", "BR-B-Mutant", "BR-C-Control", "BR-B-Control", "BR-A-Control","test_id")
+customnames<-c("BR-C-Mutant", "BR-A-Mutant", "BR-B-Mutant", "BR-C-Control", "BR-B-Control", "BR-A-Control")
+new_col_isoforms<-rownames(isoforms.rep.matrix)
+new_col_genes<-rownames(gene.rep.matrix)
+colnames(isoforms.rep.matrix)<-customnames
+colnames(gene.rep.matrix)<-customnames
+new_isoforms.rep.matrix<-cbind(isoforms.rep.matrix,new_col_isoforms)
+new_gene.rep.matrix<-cbind(gene.rep.matrix,new_col_genes)
+colnames(new_isoforms.rep.matrix)<-customnames_2
+colnames(new_gene.rep.matrix)<-customnames_2
+new_isoforms<-merge(new_isoforms.rep.matrix,orig_isoforms,by="test_id")
+new_genes<-merge(new_gene.rep.matrix,orig_genes,by="test_id")
+dim(new_genes)
+```
+
+Size of results q_value<0.05:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+new_genes_padj<-subset(new_genes,new_genes$q_value<0.05)
+dim(new_genes_padj)
+```
+
+q_value<0.05 and filtered low expressors (rowSums>1): 
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+new_genes_log2FCcutoff<-subset(new_genes_padj,new_genes_padj$log2.fold_change>1 | new_genes_padj$log2.fold_change< -1)
+new_genes_log2FCcutoff_genenames<-subset(new_genes_log2FCcutoff,new_genes_log2FCcutoff$gene!="-")
+dim(new_genes_log2FCcutoff_genenames)
+gene.rep.matrix.filtered<-subset(gene.rep.matrix,rowSums(gene.rep.matrix[,])>1)
+mean.gene.rep.matrix<-rowMeans(gene.rep.matrix.filtered)
+```
+
+Size of results filtered low expressors (rowSums>1):
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+length(mean.gene.rep.matrix)
+gene.rep.matrix.filtered<-cbind(gene.rep.matrix.filtered,mean.gene.rep.matrix)
+gene.rep.matrix.filtered<-cbind(gene.rep.matrix.filtered,rownames(gene.rep.matrix.filtered))
+colnames(gene.rep.matrix.filtered)<-c("BR-C-Mutant","BR-A-Mutant","BR-B-Mutant","BR-C-Control","BR-B-Control","BR-A-Control","mean.gene.rep.matrix","gene_id")
+gene.rep.matrix.filtered_merge<-merge(gene.rep.matrix.filtered,new_genes[,c(8,16,19)],by="gene_id")
+plot(gene.rep.matrix.filtered_merge$mean.gene.rep.matrix, gene.rep.matrix.filtered_merge$log2.fold_change.,col=ifelse(gene.rep.matrix.filtered_merge$q_value < 0.05, "red","gray67"),main="(tuxedo) Brachial Control vs. Thoracic Control",xlim=c(1,50),ylim=c(-50,50),pch=20,cex=1)
+abline(h=c(-1,1), col="blue")
+```
+
+# 4. Heatmap
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+d<-as.matrix(new_genes_log2FCcutoff_genenames[,c(2:7)])
+rownames(d) <- new_genes_log2FCcutoff_genenames[,9]
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+#myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+heatmap.2(d, main="(tuxedo) Brachial q_value<0.05, log2FC>1 | log2FC< -1", 
+          Rowv=as.dendrogram(hr),
+          cexRow=1,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, 
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none")
+
+```
+
+
+# 5. Contact
+
+Lisa Cohen, PhD student in MCIP, UC Davis     
+Phone: 321-427-9335       
+Email: ljcohen@ucdavis.edu
+
+### Sequencing and original bioinformatics analysis by:
+
+NYU Langone Medical Center   
+Bioinformatics Core, Genome Technology Center, OCS   
+Email: Genomics@nyumc.org         
+Phone: 646-501-2834   
+http://ocs.med.nyu.edu/bioinformatics-core  
+http://ocs.med.nyu.edu/genome-technology-center   
+
+Dr. Steven Shen, Associate Professor      
+Email: ShuQuan.Shen@nyumc.org  
+Phone: 212-263-2234           
+Genome Technology Center, Office of Collaborative Sciences
+and Center for Health Informatics and Bioinformatics
+NYU School of Medicine,
+227 E30th Street, Room 748, 
+New York, NY 10016
+
+# 6. References
+
+R-Bioconductor: http://www.bioconductor.org/
+
+cummeRbund: http://www.bioconductor.org/packages/release/bioc/vignettes/cummeRbund/inst/doc/cummeRbund-manual.pdf
