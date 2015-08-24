@@ -10,7 +10,6 @@ https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/
 Script associated with this report can be accessed here:
 https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/scripts/DESeq2_Blanco_invivo_8.24.2015.Rmd
 
-ApoE vs. WT
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 library(DESeq2)
 library("GenomicFeatures")
@@ -51,7 +50,6 @@ data_ApoE_DKO<-data[,c(1:10)]
 #colnames(data_ApoE_DKO)
 ```
 
-ApoE vs. DKO
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 #ExpDesign <- data.frame(row.names=colnames(data), condition = c("ApoE","ApoE","ApoE","ApoE","DKO","DKO","DKO","DKO","DKO","ApoE","WT","WT","WT","WT","WT"))
 ExpDesign_ApoE_WT <- data.frame(row.names=colnames(data_ApoE_WT), condition = c("ApoE","ApoE","ApoE","ApoE","ApoE","WT","WT","WT","WT","WT"))

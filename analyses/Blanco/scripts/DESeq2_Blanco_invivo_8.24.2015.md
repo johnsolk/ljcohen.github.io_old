@@ -10,10 +10,8 @@ https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/
 Script associated with this report can be accessed here:
 https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/scripts/DESeq2_Blanco_invivo_8.24.2015.Rmd
 
-ApoE vs. WT
 
 
-ApoE vs. DKO
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-2.png) 
 
 Size of data table, all ApoE vs. WT data
