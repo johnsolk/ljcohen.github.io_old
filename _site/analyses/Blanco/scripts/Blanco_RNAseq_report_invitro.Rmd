@@ -1,0 +1,257 @@
+Analysis file available for download here:
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/
+
+Script associated with this report can be accessed here:
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Blanco/scripts/Blanco_RNAseq_report_invitro.Rmd
+
+# Introduction
+
+These data are from two RNASeq transcript experiments combined in one high-output 2 x 50 Illumina HiSeq sequencing run, Blanco_HSQ_1 on May 28, 2014 at the Genome Technology Center, NYU Langone Medical Center. Four lanes of sequences were collected per sample for an average of 75 million reads per sample. In the in vivo experiment, RNA was extracted from aortic tissue from five mouse replicates from the following three groups: 1.) wildtype (WT), 2.) ApoE knockout (ApoE), and 3.) “double-knockout” with both alleles for ApoE and TWEAK knocked down (DKO).  In the in vitro cell culture experiment, there were two groups with four samples each: 1.) Basal and 2.) TWEAK 100 administered to the cells.
+
+Basespace link:
+https://basespace.illumina.com/s/nhKGfWNebV5Q
+
+# Table of Contents:
+1. Data Analysis Procedure
+2. PCA
+3. MA plots
+4. Heatmap
+5. Comments
+6. Contact
+7. References
+
+# 1. Data analysis procedure
+
+The alignment program, Bowtie (version 1.0.0) was used with reads mapped to the UCSC mm9 gff (iGenome version) with two mismatches allowed. The uniquely-mapped reads were subjected to subsequent necessary processing, including removal of PCR duplicates, before transcripts were counted with htseq-count. Counts files were imported into the R statistical programming environment and analyzed with the DESeq2 R/Bioconductor package (Love et al. 2014).
+
+Here, data analysis is presented from the in vitro experiment. Data analysis for the in vivo experiment can be accessed here:
+
+http://ljcohen.github.io/analyses/Blanco/index.html
+
+Filenames containing raw transcript counts from htseq-count are as follows:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(DESeq2)
+library("GenomicFeatures")
+library("genefilter")
+library(gplots)
+library(RColorBrewer)
+library("genefilter")
+library("lattice")
+setwd("~/Documents/NYUMC/Blanco/HTSeq_counts/duplicates_removed/invitro")
+mypath<-"~/Documents/NYUMC/Blanco/HTSeq_counts/duplicates_removed/invitro"
+filenames<-list.files(path=mypath, pattern= "counts.txt", full.names=FALSE)
+datalist <-lapply(filenames, function(x){read.table(x,header=FALSE, sep="\t")})
+for (i in 1:length(filenames))
+{
+  colnames(datalist[[i]])<-c("ID",filenames[[i]])
+}
+mergeddata <- Reduce(function(x,y) {merge(x,y, by="ID")}, datalist)
+#write.table(mergeddata,  paste(path = mypath, "combine_count-data.txt", sep = ""),row.names = FALSE,  col.names = TRUE, sep = "\t")
+#}
+#
+new_data_merge<-mergeddata[-1:-5,]
+rown<-new_data_merge$ID
+rownames(new_data_merge)<-rown
+new_data_merge<-new_data_merge[,-1]
+data<-new_data_merge
+col.names<-c("Exp.1.Basal","Exp.1.TW.100","Exp.2.Basal","Exp.2.TW.100","Exp.3.Basal","Exp.3.TW.100","Exp.4.Basal","Exp.4.TW.100")
+colnames(data)
+colnames(data)<-col.names
+```
+
+
+# 2. PCA
+
+This is how the paired design looks:
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+ExpDesign <- data.frame(row.names=colnames(data), condition = c("Basal","TW.100","Basal","TW.100","Basal","TW.100","Basal","TW.100"),experiment=c("Exp.1","Exp.1","Exp.2","Exp.2","Exp.3","Exp.3","Exp.4","Exp.4"))
+ExpDesign
+cds<-DESeqDataSetFromMatrix(countData=data, colData=ExpDesign,design=~experiment+condition)
+cds<-DESeq(cds, betaPrior=FALSE)
+log_cds<-rlog(cds)
+#plotPCAWithSampleNames(log_cds,intgroup="condition",ntop=40000)
+##
+x<-log_cds
+ntop=40000
+intgroup<-"condition"
+rv = rowVars(assay(x))
+select = order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
+pca = prcomp(t(assay(x)[select,]))
+  
+# extract sample names
+names = colnames(x)
+  
+fac = factor(apply( as.data.frame(colData(x)[, intgroup, drop=FALSE]), 1, paste, collapse=" : "))
+  
+colours = c( "dodgerblue3", "firebrick3" )
+  
+xyplot(
+PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=1.5,panel=function(x, y, ...) {
+      panel.xyplot(x, y, ...);
+      ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=0.7)
+    },
+aspect = "fill", col=colours,
+main = draw.key(key = list(
+      rect = list(col = colours),
+      text = list(levels(fac)),
+      rep = FALSE)))
+
+```
+
+This appears to be a paired design, with one set of samples separated into either basal or receiving TWEAK-100 treatment. Based on the close proximity of Exp.3.TW.100 to Exp.1.Basal, it might be best to remove this set of samples from the analysis as an outlier. This is how the design and PCA look after removing both Exp.3 samples:  
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+data<-data[,c(1:4,7:8)]
+col.names<-c("Exp.1.Basal","Exp.1.TW.100","Exp.2.Basal","Exp.2.TW.100","Exp.4.Basal","Exp.4.TW.100")
+colnames(data)<-col.names
+ExpDesign <- data.frame(row.names=colnames(data), condition = c("Basal","TW.100","Basal","TW.100","Basal","TW.100"),experiment=c("Exp.1","Exp.1","Exp.2","Exp.2","Exp.4","Exp.4"))
+ExpDesign
+cds<-DESeqDataSetFromMatrix(countData=data, colData=ExpDesign,design=~experiment+condition)
+cds<-DESeq(cds, betaPrior=FALSE)
+
+log_cds<-rlog(cds)
+#plotPCAWithSampleNames(log_cds,intgroup="condition",ntop=40000)
+##
+x<-log_cds
+ntop=40000
+intgroup<-"condition"
+rv = rowVars(assay(x))
+select = order(rv, decreasing=TRUE)[seq_len(min(ntop, length(rv)))]
+pca = prcomp(t(assay(x)[select,]))
+  
+# extract sample names
+names = colnames(x)
+  
+fac = factor(apply( as.data.frame(colData(x)[, intgroup, drop=FALSE]), 1, paste, collapse=" : "))
+  
+colours = c( "dodgerblue3", "firebrick3" )
+  
+xyplot(
+PC2 ~ PC1, groups=fac, data=as.data.frame(pca$x), pch=16, cex=1.5,panel=function(x, y, ...) {
+      panel.xyplot(x, y, ...);
+      ltext(x=x, y=y, labels=names, pos=1, offset=0.8, cex=0.7)
+    },
+aspect = "fill", col=colours,
+main = draw.key(key = list(
+      rect = list(col = colours),
+      text = list(levels(fac)),
+      rep = FALSE)))
+
+```
+
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# get norm counts
+# get norm counts
+norm_counts<-counts(cds,normalized=TRUE)
+norm_counts_data<-as.data.frame(norm_counts)
+gene_names<-rownames(norm_counts)
+norm_counts_data<-cbind(gene_names,norm_counts_data)
+filtered_norm_counts<-norm_counts_data[!rowSums(norm_counts_data[,2:7]==0)>=1, ]
+```
+
+
+# 3. MA plots
+
+The size of the table with all transcripts is: 
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+res1 <- results(cds)
+res1_filtered<-subset(res1,res1$padj!="NA")
+res1_filtered<-res1_filtered[order(res1_filtered$padj),]
+dim(res1_filtered)
+
+
+```
+The size of the table with only significant transcripts ApoE vs. WT (padj<0.25) is:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+res1_filtered_padj<-subset(res1_filtered,res1_filtered$padj<0.01)
+dim(res1_filtered_padj)
+
+plot(log2(res1_filtered$baseMean), res1_filtered$log2FoldChange, col=ifelse(res1_filtered$padj < 0.01, "red","gray67"),main="In vitro, TW.100 vs. Basal (padj<0.01)",xlim=c(3,20),ylim=c(-10,10),pch=20,cex=1)
+abline(h=c(-1 ,1), col="blue")
+
+```
+
+
+# 4. Heatmap
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+data<-as.data.frame(res1_filtered)
+gene_names<-rownames(data)
+data<-cbind(data,gene_names)
+data_counts<-merge(data,filtered_norm_counts,by="gene_names")
+data_counts<-data_counts[order(data_counts$padj),]
+#dim(data_counts)
+#write.csv(data_counts,file="invitro_all_June2015.csv")
+
+data_padj<-as.data.frame(res1_filtered_padj)
+gene_names<-rownames(data_padj)
+data_padj<-cbind(data_padj,gene_names)
+data_counts<-merge(data_padj,filtered_norm_counts,by="gene_names")
+data_counts<-data_counts[order(data_counts$padj),]
+#dim(data_counts)
+
+up_down_1FC<-subset(data_counts,data_counts$log2FoldChange>1 | data_counts$log2FoldChange< -1)
+#write.csv(up_down_1FC,file="invitro_padj0.01_log2FC1_June2015.csv")
+#
+d <- as.matrix(up_down_1FC[,c(8:13)])
+rownames(d) <- up_down_1FC[,1]
+d<-na.omit(d)
+d<-d[,c(1,3,5,2,4,6)]
+colnames(d)<-c("Exp.1.Basal","Exp.2.Basal","Exp.4.Basal","Exp.1.TW.100","Exp.2.TW.100","Exp.4.TW.100")
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+heatmap.2(d, main="In vitro TW-100 vs. Basal, padj<0.01, log2FC +-1", 
+          Rowv=as.dendrogram(hr),
+          cexRow=0.15,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, 
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none", RowSideColors= myClusterSideBar)
+```
+
+
+# 5. Comments
+
+Let me know if you agree with this analysis, if you have any questions or would like to make any changes. 
+
+# 6. Contact
+
+Lisa Cohen, PhD student in MCIP, UC Davis     
+Phone: 321-427-9335       
+Email: ljcohen@ucdavis.edu
+
+### Sequencing and original bioinformatics analysis by:
+
+NYU Langone Medical Center   
+Bioinformatics Core, Genome Technology Center, OCS   
+Email: Genomics@nyumc.org         
+Phone: 646-501-2834   
+http://ocs.med.nyu.edu/bioinformatics-core  
+http://ocs.med.nyu.edu/genome-technology-center   
+
+Dr. Steven Shen, Associate Professor      
+Email: ShuQuan.Shen@nyumc.org  
+Phone: 212-263-2234           
+Genome Technology Center, Office of Collaborative Sciences
+and Center for Health Informatics and Bioinformatics
+NYU School of Medicine,
+227 E30th Street, Room 748, 
+New York, NY 10016
+
+
+
+# 7. References
+
+M. I. Love, W. Huber, S. Anders: Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.
+Genome Biology 2014, 15:550. http://dx.doi.org/10.1186/s13059-014-0550-8
+
+R-Bioconductor: http://www.bioconductor.org/
+
+DESeq2: http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf

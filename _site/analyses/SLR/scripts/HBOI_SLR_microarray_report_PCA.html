@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Table of Contents:</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<p>Analysis files available here for download:</p>
+
+<p><a href="https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/SLR">https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/SLR</a></p>
+
+<h1>Table of Contents:</h1>
+
+<ol>
+<li>Experiment Description</li>
+<li>Lab Protocols</li>
+<li>Data Collection</li>
+<li>Raw Data QC</li>
+<li>PCA Results Figures</li>
+<li>Transcript-level expression for each chip</li>
+<li>Results Files</li>
+<li>Venn Diagram Results Figures</li>
+<li>Comments</li>
+<li>Contact</li>
+<li>References</li>
+</ol>
+
+<h1>1. Experiment Description</h1>
+
+<p>This experiment consisted of hard coral samples, Orbicella faveolata collected from 3 sites (South, Ledge, Central) on the St. Lucie Reef on 3 different dates (June 2012, Oct 2012, Jan/Feb 2013). At least 4 samples at each site were collected from separate colonies for a total of 44 samples. </p>
+
+<p>The aim was to see if gene expression patterns were different in the samples based on spatial or temporal differences between samples. </p>
+
+<h1>2. Lab Protocols</h1>
+
+<p>Coral samples were immediately preserved in the field in a guanidinium thiocyanate-phenol nucleic acid preservative, transported back to the lab on ice and stored at -80ºC. In a clean RNase free lab setting, phenol-chloroform extractions were performed on all samples. Aliquots were removed and chloroform added at a ratio of 1:5. RNA was separated in the aqueous layer, precipitated with ethanol and purified with LiCl. A NanoDrop® 1000 spectrophotometer (Thermo Fisher Scientific, Inc., MA USA) was used to quantify total RNA. Label-IT© (Mirus Bio LLC, Wisconsin, USA) nucleic acid labeling kit (MIR 3700) was used to covalently attach Cy™ 5 (excitation 650 nm and emission 670 nm) cyanine fluorescent dye at a frequency of one label about every 20-60 base pairs to 5µg of each sample.  Fluorescent dye labeling allows detection if binding occurs between complimentary RNA fragments in the sample and known oligonucleotides spotted on the microarray. Labeling was done according to the standard manufacturer’s protocol (Lit# ML002, Rev 11/15/06) and quantified on a NanoDrop® 1000 spectrophotometer, wavelengths 225-750 nm. All Cy™ 5-labeled total RNA samples were hybridized to custom anti-sense 4x2K oligonucleotide CustomArrays™ using methods described in the hybridization and imaging protocol (Ecogenomics, Inc., Japan). Total RNA samples were fragmented with 10X fragmentation reagent (buffered zinc solution) and stop solution (200 mM EDTA, pH 8.0) (Catalog #AM8740, Ambion®, Applied Biosystems, Texas, USA).   </p>
+
+<h1>3. Data Collection</h1>
+
+<p>Microarray chips were imaged at 635 nm using a high-resolution laser GenePix® 4200A microarray scanner (Axon, Molecular Devices, California, USA).  Data were extracted from images using GenePixPro 6.0 software as .gpr files.</p>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code>## Error in as.matrix(sample_info): object &#39;sample_info&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_matrix&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(sample_info_matrix): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;sample_info_matrix&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_sum&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<h1>4. Raw Data QC:</h1>
+
+<p>Data were imported into the R statistical programming environment. The R-Bioconductor package, limma (Linear Models for Microarray Data, version 3.22.3, Ritchie et al. 2015; Smyth 2004) was used to assess the quality of the data and to analyze for differential expression. All data were shifted +1 to accomodate log2 transformation. These are the first 6 rows of shifted +1 raw microarray data (not log2 transformed): </p>
+
+<pre><code>##                      1_4 1_3 1_2 1_1 2_4 2_3 2_2 2_1 3_4 3_3 3_2 3_1 4_4 4_3 4_2 4_1 5_4 5_3 5_2 5_1 6_4 6_3 6_2 6_1 7_4 7_3 7_2 7_1 8_4 8_3 8_2 8_1 9_4 9_3 9_2 9_1 10_4 10_3 10_2 10_1 11_4 11_3 11_2 11_1
+## DkC.G11._17_51        14  10  28   2  11   6  15  12   9  13   6   3  13   6   9   5  19  10   8  20  12  12  10   5   8  13  15   1  18  19  17   7  16   6  18   7   10    7    4    4    7    8    2    4
+## Ac_28_65_99           62  45  52   2  43  15  47  30  33  41  15   5  36  15  26   7  78  34  29  21  39  32  30  12  55  60  72  24  61  62  66  22  61  27  73  20   34   23   15    9   26   41   13   11
+## Hsp27_cont.B1._17_51  24  20  37   2  26   8  19  17  19  21  11   5  21   8  11   6  44  20  20  20  26  21  18   9  20  30  32  13  37  38  27  12  33  11  30  14   21   13    8    4   19   20    8    4
+## SedC.E9._131_165      36  20  70   3  24  11  30  22  29  25  14   8  27  12  17  10  51  26  27  20  35  27  25  13  29  31  26  10  60  64  36  16  45  12  31  17   31   18    8    6   24   28   13    5
+## Ac_24_265_299         23  13  13   1  21   7  11   8  18  17   6   5  22  12  14   3  30  15  13  17  25  15  20   6  19  18  18   6  28  27  17   7  20   7  19   7   14    8    5    3   10   12    4    4
+## Ac_3_209_243          10  10  23   1   8   2   7   7   9  11   4   3   8   4  10   4  13  11  10  15   7   6   4   5   8  16  22   5  12   9   6   4  10   5  20   7    9    4    4    3    7    8    4    3
+</code></pre>
+
+<p>Data were log2 transformed then normalized with 2 methods: the internal limma function &ldquo;normalizeBetweenArrays&rdquo; and the base R function, &ldquo;normalizeCyclicLoess&rdquo; Loess transformation. See &ldquo;HBOI_SLR_microarray_log2_norm_results.ppt&rdquo; and 3 arrayQualityMetrics reports for further details on the quality assessment of the raw data and why the Loess normalization method was chosen to smooth the data.</p>
+
+<p><a href="http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_notransform/index.html">http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_notransform/index.html</a></p>
+
+<p><a href="http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform/index.html">http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform/index.html</a></p>
+
+<p><a href="http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_Loess/index.html">http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_Loess/index.html</a></p>
+
+<p><a href="http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_normBetweenArrays/index.html">http://ljcohen.github.io/analyses/SLR/array_quality_metrics/QAreport_log2transform_normBetweenArrays/index.html</a></p>
+
+<p><a href="http://ljcohen.github.io/analyses/SLR/array_quality_metrics/HBOI_SLR_microarray_log2_norm_results.pptx.pdf">http://ljcohen.github.io/analyses/SLR/array_quality_metrics/HBOI_SLR_microarray_log2_norm_results.pptx.pdf</a></p>
+
+<p>Typically, when data are noisy like this, and grouped slightly by technical variables such as hyb date and chip, normalization and removal of outliers can help with smoothing the data to pull out biological variation. (See Section 6.3 Between-Array Normalization of limma user guide: <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf">http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf</a>)</p>
+
+<p>Internal control probes were removed. These probes are supplied by the manufacturer and contain plant (SpkCtrl: RCP1| AF168390_1144_1178) and bacterial (SpkCtrl: NAC1| AF198054_481_515) sequences. We did not spike-in control RNA into these samples. Since total mRNA from corals potentially contain these sequences, we do typically see binding to these probes despite the absence of spike-in and they are not accurate to use as controls.</p>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code>## Error in as.vector(x, mode): cannot coerce type &#39;closure&#39; to vector of type &#39;any&#39;
+</code></pre>
+
+<pre><code>## Error in as.data.frame(annotation_matrix): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;annotation_matrix&#39; not found
+</code></pre>
+
+<pre><code>## Error in make.names(annotation_dataframe$Name, unique = TRUE): object &#39;annotation_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;annotation_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;annotation_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in rownames(annotation_controls): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;rownames&#39;: Error: object &#39;annotation_controls&#39; not found
+</code></pre>
+
+<pre><code>## Error in rownames(annotation_SedCC9): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;rownames&#39;: Error: object &#39;annotation_SedCC9&#39; not found
+</code></pre>
+
+<pre><code>## Error in rownames(annotation_controls): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;rownames&#39;: Error: object &#39;annotation_controls&#39; not found
+</code></pre>
+
+<h1>5. PCA results</h1>
+
+<p>Principal component analysis (PCA) reduces all expression data for each sample down to one point and compares samples in unitless vector space. The farther apart the samples are, the greater the differences there are in the data. When doing a differential expression analysis, it is important to understand where the variability is between samples so results can be interpreted accordingly. </p>
+
+<p>Variables such as chip, hyb date, site, sample collection date, and &ldquo;var&rdquo; (site and sample date combined) are color-coded in the PCA below to see if there are differences between groups. Chip and hyb date are technical groupings, so we do not expect to see these data clustered together. Site and sample collection date are both biological groupings. If these data appear to be grouped together, then we know differences in gene expression between samples are due to biological variation and not technical variation.</p>
+
+<h2>chip</h2>
+
+<p>Data from chip2 appear to group together on the left along PC1 (the primary source of experimental variation). We could try to remove this chip as a potential outlier.</p>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in t(x): object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;colnames&#39;: Error: object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>hyb date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>site</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>var</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<p>Since the data do not appear to strongly cluster together based on the biolgical groupings, site and sample collection date we will see if removing data from chip 2 will cause the data to become more spread apart, with greater differences between biological groups.</p>
+
+<h2>chip</h2>
+
+<p>This time, we see that there are now several chips that group together along PC2 (the secondary source of variation in the experiment). We could try removing these later as well to see if the groupings will improve.</p>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in t(x): object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;colnames&#39;: Error: object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>hyb date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>site</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>var</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<p>Here, we will try removing data from chip 10 to see if this will imrove the groupings.</p>
+
+<h2>chip</h2>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in t(x): object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;colnames&#39;: Error: object &#39;x&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>hyb date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>site</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>date</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h2>var</h2>
+
+<pre><code>## Error in as.data.frame(pca$x): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;pca&#39; not found
+</code></pre>
+
+<h1>6. Transcript-level expression for each chip</h1>
+
+<p>Transcript-level expression variability for each array used in the experiment. There are 150 transcripts represented on the microarray, with 15 spots per transcripts in 5 pieces (3 spots per piece). Box plots are mean, +- sd and min/max expression.</p>
+
+<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection
+</code></pre>
+
+<pre><code>## Error in annotation[!annotation$Probe == &quot;Spkctrl&quot;, ]: error in evaluating the argument &#39;i&#39; in selecting a method for function &#39;[&#39;: Error in annotation$Probe : object of type &#39;closure&#39; is not subsettable
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;annotation_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.character(names): cannot coerce type &#39;closure&#39; to vector of type &#39;character&#39;
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;annotation_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(annotation_minuscontrols_ID) &lt;- col.names1: object &#39;annotation_minuscontrols_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(norm_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(norm_data_ID) &lt;- col.names2: object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in merge(norm_data_ID, annotation_minuscontrols_ID, &quot;ID&quot;): object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = -Probe): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = Probe): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, mean): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, sd): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data1) &lt;- c(&quot;value1&quot;, &quot;group1&quot;): object &#39;array_data1&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data1): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data1&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value1, x = factor(group1)), data = array_data1): object &#39;array_data1&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p1&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p1&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data2) &lt;- c(&quot;value2&quot;, &quot;group2&quot;): object &#39;array_data2&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data2): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data2&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value2, x = factor(group2)), data = array_data2): object &#39;array_data2&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p2&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p2&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p3&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p3&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p4&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p4&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p5&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p5&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p6&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p6&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p7&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p7&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p8&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p8&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p9&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p9&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p10&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p10&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p11&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p11&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p12&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p12&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p13&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p13&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p14&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p14&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p15&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p15&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p16&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p16&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p17&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p17&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p18&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p18&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p19&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p19&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p20&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p20&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p21&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p21&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p22&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p22&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p23&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p23&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p24&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p24&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p25&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p25&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p26&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p26&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p27&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p27&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p28&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p28&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p29&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p29&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p30&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p30&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p31&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p31&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p32&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p32&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p33&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p33&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p34&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p34&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p35&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p35&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(array_data) &lt;- c(&quot;value&quot;, &quot;group&quot;): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(array_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in ggplot(aes(y = value, x = factor(group)), data = array_data): object &#39;array_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p36&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;p36&#39; not found
+</code></pre>
+
+<h1>Results</h1>
+
+<p>These data do not group strongly by the biological variables: site, date, or combined site-date. We will make comparisons anyway to see if there are differences. </p>
+
+<p>Here we will create an interaction model, assuming a factorial design for the experiment. This is a 3 x 3 factorial design, even though there were no samples collected at the central site in Oct 2012. Differential expression models work by taking multiple pairwise comparisons, then looking at the overlap between the comparisons.</p>
+
+<h3>By Transcript, 150 transcripts total on the array</h3>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(norm_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(norm_data_ID) &lt;- col.names2: object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in merge(norm_data_ID, annotation_minuscontrols_ID, &quot;ID&quot;): object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = -Probe): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = Probe): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, mean): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, sd): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in unique.default(x, nmax = nmax): unique() applies only to vectors
+</code></pre>
+
+<pre><code>## Error in model.frame.default(object, data, xlev = xlev): object is not a matrix
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;list&quot;): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<h3>By probe, 726 probes on the array</h3>
+
+<p>Mean of each probe piece (5 pieces per transcript) to see if there are measureable expression differences between groups. There are 726 probes per array.</p>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(norm_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(norm_data_ID) &lt;- col.names2: object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in merge(norm_data_ID, annotation_minuscontrols_ID, &quot;ID&quot;): object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = -Name): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = Name): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, mean): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, sd): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in unique.default(x, nmax = nmax): unique() applies only to vectors
+</code></pre>
+
+<pre><code>## Error in model.frame.default(object, data, xlev = xlev): object is not a matrix
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;list&quot;): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<h3>By Function, 29 functions on the array</h3>
+
+<p>For example, nucleic acid modification, growth &amp; development, etc.</p>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;SLR_matrix_minuscontrols&#39; not found
+</code></pre>
+
+<pre><code>## Error in as.data.frame(norm_data): error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;as.data.frame&#39;: Error: object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data&#39; not found
+</code></pre>
+
+<pre><code>## Error in colnames(norm_data_ID) &lt;- col.names2: object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in merge(norm_data_ID, annotation_minuscontrols_ID, &quot;ID&quot;): object &#39;norm_data_ID&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;norm_data_annotated_all&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = -Function): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in subset(norm_data_annotated, select = Function): object &#39;norm_data_annotated&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, mean): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in aggregate(iris.x, iris.s, sd): object &#39;iris.x&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;sample_info_dataframe&#39; not found
+</code></pre>
+
+<pre><code>## Error in unique.default(x, nmax = nmax): unique() applies only to vectors
+</code></pre>
+
+<pre><code>## Error in model.frame.default(object, data, xlev = xlev): object is not a matrix
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;list&quot;): object &#39;mean_probe&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<pre><code>## Error in if (levels[1] == &quot;(Intercept)&quot;) {: argument is of length zero
+</code></pre>
+
+<pre><code>## Error in NCOL(fit$coefficients): object &#39;fit&#39; not found
+</code></pre>
+
+<pre><code>## Error in ebayes(fit = fit, proportion = proportion, stdev.coef.lim = stdev.coef.lim, : object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;MArrayLM&quot;): object &#39;fit2&#39; not found
+</code></pre>
+
+<pre><code>## Error in is(object, &quot;VennCounts&quot;): object &#39;results&#39; not found
+</code></pre>
+
+<h1>9. Comments</h1>
+
+<p>After looking over these results, let me know if you agree with the analysis methods or have any questions. Please feel free to suggest alternative methods.</p>
+
+<h1>10. Contact</h1>
+
+<p>Lisa Cohen,
+Ph.D. student MCIP,
+University of California, Davis
+<a href="mailto:ljcohen@ucdavis.edu">ljcohen@ucdavis.edu</a>
+321-427-9335</p>
+
+<h1>11. References</h1>
+
+<p>Izarry RA, Hobbs B, Collin F, Beazer-Barclay YD, Antonellis KJ, Scherf U, Speed TP. (2003). Exploration, normalization, and summaries of high density oligonucleotide array probe level data. Biostatistics. 2003 Apr;4(2):249-64. <a href="http://www.ncbi.nlm.nih.gov/pubmed/12925520">http://www.ncbi.nlm.nih.gov/pubmed/12925520</a></p>
+
+<p>Ritchie, ME, Phipson, B, Wu, D, Hu, Y, Law, CW, Shi, W, and Smyth, GK (2015). limma powers differential expression analyses for RNA-sequencing and microarray studies. Nucleic Acids Research 43(7), e47. <a href="http://www.ncbi.nlm.nih.gov/pubmed/25605792">http://www.ncbi.nlm.nih.gov/pubmed/25605792</a></p>
+
+<p>Smyth, G. K. (2004). Linear models and empirical Bayes methods for assessing differential expression in microarray experiments. Statistical Applications in Genetics and Molecular Biology, Vol. 3, No. 1, Article 3. <a href="http://www.ncbi.nlm.nih.gov/pubmed/16646809">http://www.ncbi.nlm.nih.gov/pubmed/16646809</a> <a href="http://www.statsci.org/smyth/pubs/ebayes.pdf">http://www.statsci.org/smyth/pubs/ebayes.pdf</a></p>
+
+<p>R-Bioconductor: <a href="http://www.bioconductor.org/">http://www.bioconductor.org/</a></p>
+
+<p>limma: <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf">http://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf</a></p>
+
+</body>
+
+</html>
+
