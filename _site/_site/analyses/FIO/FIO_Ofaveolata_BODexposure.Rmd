@@ -1,0 +1,19 @@
+Analysis files available here for download:
+
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/SLR
+
+If you're interested in the code used to generate this report, see this .Rmd markdown file:
+
+https://github.com/ljcohen/ljcohen.github.io/blob/master/analyses/SLR/scripts/HBOI_SLR_microarray_report_PCA.Rmd
+
+# Table of Contents:
+1. Experiment Description
+2. Lab Protocols
+3. Data Collection
+4. Raw Data QC
+5. PCA
+6. Results
+7. Comments
+8. Contact
+9. References
+

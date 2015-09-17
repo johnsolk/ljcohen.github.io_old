@@ -1,0 +1,150 @@
+Script for these figures:
+https://github.com/ljcohen/ljcohen.github.io/tree/master/analyses/Dasen/scripts/Dasen_RNAseq_report_thoracic_padj_nologFCcutoff.Rmd
+
+# Thoracic-mutant vs. Control
+
+Filenames containing raw transcript counts from htseq-count are as follows:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(DESeq2)
+library("GenomicFeatures")
+library("genefilter")
+library(gplots)
+library(RColorBrewer)
+library(biomaRt)
+library("genefilter")
+library("lattice")
+setwd("~/Documents/NYUMC/Dasen/thoracic/htseq_counts")
+mypath<-"~/Documents/NYUMC/Dasen/thoracic/htseq_counts"
+filenames<-list.files(path=mypath, pattern= "_counts.txt", full.names=FALSE)
+datalist <-lapply(filenames, function(x){read.table(x,header=FALSE, sep="\t")})
+for (i in 1:length(filenames))
+{
+  colnames(datalist[[i]])<-c("ID",filenames[[i]])
+}
+mergeddata <- Reduce(function(x,y) {merge(x,y, by="ID")}, datalist)
+new_data_merge<-mergeddata[-1:-5,]
+#write.csv(new_data_merge,file="Dasen_thoracic_count_data_Ensembl.csv")
+rownames(new_data_merge)<-new_data_merge$ID
+new_data_merge<-new_data_merge[,-1]
+data<-new_data_merge
+colnames(data)
+col.names<-c("TH-A-Control","TH-A-Mutant","TH-B-Control","TH-B-Mutant","TH-C-Control","TH-C-Mutant")
+colnames(data)<-col.names
+
+ExpDesign <- data.frame(row.names=colnames(data), condition = c("Control","Mutant","Control","Mutant","Control","Mutant"))
+cds<-DESeqDataSetFromMatrix(countData=data, colData=ExpDesign,design=~condition)
+cds$condition <- relevel(cds$condition, "Control")
+cds<-DESeq(cds, betaPrior=FALSE)
+# log2 transformation for PCA plot
+
+# get norm counts
+norm_counts<-counts(cds,normalized=TRUE)
+norm_counts_data<-as.data.frame(norm_counts)
+ensembl_id<-rownames(norm_counts)
+norm_counts_data<-cbind(ensembl_id,norm_counts_data)
+filtered_norm_counts<-norm_counts_data[!rowSums(norm_counts_data[,2:7]==0)>=1, ]
+```
+
+The size of the table with all transcripts is: 
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+# get gene name from Ensembl gene ID
+ensembl=useMart("ensembl")
+ensembl = useDataset("mmusculus_gene_ensembl",mart=ensembl)
+data_table<-filtered_norm_counts
+
+query<-getBM(attributes=c('ensembl_gene_id','external_gene_name','gene_biotype'), filters = 'ensembl_gene_id', values = ensembl_id, mart=ensembl)
+col.names<-c("ensembl_id","external_gene_id","gene_biotype")
+colnames(query)<-col.names
+merge_biomart_res_counts <- merge(data_table,query,by="ensembl_id")
+temp_data_merged_counts<-merge_biomart_res_counts
+
+##
+res<-results(cds,contrast=c("condition","Mutant","Control"))
+res_ordered<-res[order(res$padj),]
+ensembl_id<-rownames(res_ordered)
+res_ordered<-as.data.frame(res_ordered)
+res_ordered<-cbind(res_ordered,ensembl_id)
+merge_biomart_res_counts <- merge(temp_data_merged_counts,res_ordered,by="ensembl_id")
+merge_biomart_res_all<-subset(merge_biomart_res_counts,merge_biomart_res_counts$padj!="NA")
+merge_biomart_res_all<-merge_biomart_res_all[order(merge_biomart_res_all$padj),]
+dim(merge_biomart_res_all)
+#write.csv(merge_biomart_res_all,"Dasen_thoracic_Mutant_Control_July2015.csv")
+```
+
+The size of the table with only significant transcripts, padj<0.05 is:
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+#res_merged_cutoff<-subset(merge_biomart_res_all,merge_biomart_res_all$padj<0.05)
+res_merged_cutoff<-subset(merge_biomart_res_all,merge_biomart_res_all$padj<0.1)
+dim(res_merged_cutoff)
+write.csv(res_merged_cutoff,"Dasen_thoracic_Mutant_Control_padj0.1_July2015.csv")
+plot(log2(res$baseMean), res$log2FoldChange, col=ifelse(res$padj < 0.05, "red","gray67"),main="(DESeq2) Thoracic Mutant vs. Control (padj<0.05)",xlim=c(1,15),pch=20,cex=1)
+abline(h=c(-1,1), col="blue")
+```
+
+
+# Heatmap
+
+All genes padj<0.05, regardless of FC (all red points from MA plot above)
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+#up_down_1FC<-subset(res_merged_cutoff,res_merged_cutoff$log2FoldChange>1 | res_merged_cutoff$log2FoldChange< -1)
+#d<-up_down_1FC
+d<-as.matrix(res_merged_cutoff[,c(2:7)])
+rownames(d)<-res_merged_cutoff[,8]
+d<-na.omit(d)
+d<-d[,c(1,3,5,2,4,6)]
+colnames(d)<-c("TH-A-Control","TH-B-Control","TH-C-Control","TH-A-Mutant","TH-B-Mutant","TH-C-Mutant")
+hr <- hclust(as.dist(1-cor(t(d), method="pearson")), method="complete")
+mycl <- cutree(hr, h=max(hr$height/1.5))
+clusterCols <- rainbow(length(unique(mycl)))
+myClusterSideBar <- clusterCols[mycl]
+myheatcol <- greenred(75)
+#tiff("Thoracic_heatmap.tiff", width = 1000,height = 1000,units="px",res = NA,pointsize=12) 
+heatmap.2(d, 
+          Rowv=as.dendrogram(hr),
+          cexRow=0.8,cexCol=0.8,srtCol= 90,
+          adjCol = c(NA,0),offsetCol=2.5, offsetRow=0.01,
+          Colv=NA, dendrogram="row", 
+          scale="row", col=myheatcol, 
+          density.info="none", 
+          trace="none")
+#dev.off()
+###
+
+```
+
+
+# 5. Contact
+
+Lisa Cohen, PhD student in MCIP, UC Davis     
+Phone: 321-427-9335       
+Email: ljcohen@ucdavis.edu
+
+### Sequencing and original bioinformatics analysis by:
+
+NYU Langone Medical Center   
+Bioinformatics Core, Genome Technology Center, OCS   
+Email: Genomics@nyumc.org         
+Phone: 646-501-2834   
+http://ocs.med.nyu.edu/bioinformatics-core  
+http://ocs.med.nyu.edu/genome-technology-center   
+
+Dr. Steven Shen, Associate Professor      
+Email: ShuQuan.Shen@nyumc.org  
+Phone: 212-263-2234           
+Genome Technology Center, Office of Collaborative Sciences
+and Center for Health Informatics and Bioinformatics
+NYU School of Medicine,
+227 E30th Street, Room 748, 
+New York, NY 10016
+
+
+
+# 6. References
+
+M. I. Love, W. Huber, S. Anders: Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.
+Genome Biology 2014, 15:550. http://dx.doi.org/10.1186/s13059-014-0550-8
+
+R-Bioconductor: http://www.bioconductor.org/
+
+DESeq2: http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf
